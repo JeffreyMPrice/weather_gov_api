@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "weather_gov_api"
+require "webmock/rspec"
+require "json"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -12,4 +14,12 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+end
+
+def fixture_path
+  File.expand_path("fixtures", __dir__)
+end
+
+def fixture(file)
+  File.read(File.join(fixture_path, file))
 end

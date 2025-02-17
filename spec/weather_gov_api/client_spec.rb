@@ -3,11 +3,11 @@
 require "spec_helper"
 
 RSpec.describe WeatherGovApi::Client do
-  let(:client) { described_class.new(user_agent: "Ruby Gem WeatherGov API Agent") }
+  let(:client) { described_class.new(user_agent: "Test User Agent") }
 
   describe "#initialize" do
     it "sets a custom user agent" do
-      expect(client.instance_variable_get(:@user_agent)).to eq("Ruby Gem WeatherGov API Agent")
+      expect(client.instance_variable_get(:@user_agent)).to eq("Test User Agent")
     end
 
     it "sets a default user agent when none provided" do
@@ -21,7 +21,6 @@ RSpec.describe WeatherGovApi::Client do
     # We'll add more tests here as we implement features
     context "getting points data" do
       it "fetches weather data for specific coordinates" do
-        pending "Implement points endpoint"
         latitude = 39.7456
         longitude = -97.0892
         
