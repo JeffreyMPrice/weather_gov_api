@@ -1,0 +1,52 @@
+{
+    "@context": [
+        "https://geojson.org/geojson-ld/geojson-context.jsonld",
+        {
+            "@version": "1.1"
+        }
+    ],
+    "id": "https://api.weather.gov/points/39.7456,-97.0892",
+    "type": "Feature",
+    "geometry": {
+        "type": "Point",
+        "coordinates": [
+            -97.0892,
+            39.7456
+        ]
+    },
+    "properties": {
+        "@id": "https://api.weather.gov/points/39.7456,-97.0892",
+        "@type": "wx:Point",
+        "cwa": "TOP",
+        "forecastOffice": "https://api.weather.gov/offices/TOP",
+        "gridId": "TOP",
+        "gridX": 31,
+        "gridY": 80,
+        "forecast": "https://api.weather.gov/gridpoints/TOP/31,80/forecast",
+        "forecastHourly": "https://api.weather.gov/gridpoints/TOP/31,80/forecast/hourly",
+        "forecastGridData": "https://api.weather.gov/gridpoints/TOP/31,80",
+        "observationStations": "https://api.weather.gov/gridpoints/TOP/31,80/stations",
+        "relativeLocation": {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -97.086661,
+                    39.679376
+                ]
+            },
+            "properties": {
+                "city": "Linn",
+                "state": "KS",
+                "distance": {
+                    "unitCode": "wmoUnit:m",
+                    "value": 7366.9851976444
+                },
+                "bearing": {
+                    "unitCode": "wmoUnit:degree_(angle)",
+                    "value": 360
+                }
+            }
+        }
+    }
+}
