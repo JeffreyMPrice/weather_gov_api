@@ -11,3 +11,6 @@ jobs:
             gem install bundler -v 2.6.3
             bundle install
             bundle exec rake
+      - run:
+          name: Set execute permissions
+          command: chmod +x bin/console
