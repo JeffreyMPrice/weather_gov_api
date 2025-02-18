@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module WeatherGovApi
+  # Wrapper for Weather.gov API responses
+  # Provides convenient access to response status and parsed data
   class Response
     attr_reader :status, :data
 
@@ -13,4 +15,4 @@ module WeatherGovApi
       status >= 200 && status < 300
     end
   end
-end 
+end

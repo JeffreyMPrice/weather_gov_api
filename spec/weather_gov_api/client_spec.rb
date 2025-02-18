@@ -24,8 +24,8 @@ RSpec.describe WeatherGovApi::Client do
       let(:endpoint) { "https://api.weather.gov/points/#{latitude},#{longitude}" }
       let(:headers) do
         {
-          'Accept' => 'application/json',
-          'User-Agent' => 'Test User Agent'
+          "Accept" => "application/json",
+          "User-Agent" => "Test User Agent"
         }
       end
 
@@ -35,7 +35,7 @@ RSpec.describe WeatherGovApi::Client do
           .to_return(
             status: 200,
             body: fixture("points_response.json"),
-            headers: { 'Content-Type' => 'application/json' }
+            headers: { "Content-Type" => "application/json" }
           )
 
         response = client.points(latitude: latitude, longitude: longitude)
@@ -49,7 +49,7 @@ RSpec.describe WeatherGovApi::Client do
           .to_return(
             status: 404,
             body: '{"detail": "No points found for coordinates"}',
-            headers: { 'Content-Type' => 'application/json' }
+            headers: { "Content-Type" => "application/json" }
           )
 
         response = client.points(latitude: latitude, longitude: longitude)
@@ -62,9 +62,9 @@ RSpec.describe WeatherGovApi::Client do
           .with(headers: headers)
           .to_timeout
 
-        expect {
+        expect do
           client.points(latitude: latitude, longitude: longitude)
-        }.to raise_error(WeatherGovApi::Error, /API request failed/)
+        end.to raise_error(WeatherGovApi::Error, /API request failed/)
       end
 
       it "raises an error for network connection errors" do
@@ -72,9 +72,9 @@ RSpec.describe WeatherGovApi::Client do
           .with(headers: headers)
           .to_raise(Faraday::ConnectionFailed.new("Failed to connect"))
 
-        expect {
+        expect do
           client.points(latitude: latitude, longitude: longitude)
-        }.to raise_error(WeatherGovApi::Error, /API request failed/)
+        end.to raise_error(WeatherGovApi::Error, /API request failed/)
       end
 
       it "handles server errors (500)" do
@@ -83,7 +83,7 @@ RSpec.describe WeatherGovApi::Client do
           .to_return(
             status: 500,
             body: '{"detail": "Internal Server Error"}',
-            headers: { 'Content-Type' => 'application/json' }
+            headers: { "Content-Type" => "application/json" }
           )
 
         response = client.points(latitude: latitude, longitude: longitude)
@@ -92,13 +92,13 @@ RSpec.describe WeatherGovApi::Client do
       end
 
       it "validates coordinate inputs" do
-        expect {
+        expect do
           client.points(latitude: 91, longitude: longitude)
-        }.to raise_error(ArgumentError, /Invalid latitude/)
+        end.to raise_error(ArgumentError, /Invalid latitude/)
 
-        expect {
+        expect do
           client.points(latitude: latitude, longitude: 181)
-        }.to raise_error(ArgumentError, /Invalid longitude/)
+        end.to raise_error(ArgumentError, /Invalid longitude/)
       end
 
       it "handles non-US coordinates" do
@@ -118,7 +118,7 @@ RSpec.describe WeatherGovApi::Client do
               detail: "Unable to provide data for requested point #{non_us_latitude},#{non_us_longitude}",
               instance: "https://api.weather.gov/requests/1b57faad"
             }.to_json,
-            headers: { 'Content-Type' => 'application/json' }
+            headers: { "Content-Type" => "application/json" }
           )
 
         response = client.points(latitude: non_us_latitude, longitude: non_us_longitude)
@@ -129,4 +129,4 @@ RSpec.describe WeatherGovApi::Client do
       end
     end
   end
-end 
+end

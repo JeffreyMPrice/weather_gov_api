@@ -1,8 +1,11 @@
-module WeatherGovApi
+# frozen_string_literal: true
 
+module WeatherGovApi
+  # Client for interacting with the Weather.gov API
+  # Handles requests to fetch weather data for US coordinates
   class Client
     BASE_URL = "https://api.weather.gov"
-    
+
     def initialize(user_agent: nil)
       @user_agent = user_agent || "WeatherGovApi Ruby Gem (#{WeatherGovApi::VERSION})"
     end
@@ -18,13 +21,11 @@ module WeatherGovApi
     private
 
     def validate_coordinates(latitude, longitude)
-      unless latitude.between?(-90, 90)
-        raise ArgumentError, "Invalid latitude: must be between -90 and 90"
-      end
+      raise ArgumentError, "Invalid latitude: must be between -90 and 90" unless latitude.between?(-90, 90)
 
-      unless longitude.between?(-180, 180)
-        raise ArgumentError, "Invalid longitude: must be between -180 and 180"
-      end
+      return if longitude.between?(-180, 180)
+
+      raise ArgumentError, "Invalid longitude: must be between -180 and 180"
     end
 
     def connection

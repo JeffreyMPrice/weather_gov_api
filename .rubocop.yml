@@ -6,3 +6,19 @@ Style/StringLiterals:
 
 Style/StringLiteralsInInterpolation:
   EnforcedStyle: double_quotes
+
+Layout/EndOfLine:
+  EnforcedStyle: lf
+
+# Disable documentation requirements for specs
+Style/Documentation:
+  Enabled: true
+  Exclude:
+    - "spec/**/*"
+
+# Allow longer blocks in specs
+Metrics/BlockLength:
+  Enabled: true
+  Exclude:
+    - "spec/**/*"
+    - "*.gemspec"
