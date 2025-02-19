@@ -28,6 +28,17 @@ puts response.body
 ```ruby
 client = WeatherGovApi::Client.new(user_agent: 'MyApp/1.0')
 ```
+## Available Methods
+
+### points(latitude:, longitude:)
+Fetches basic point data for the given coordinates.
+
+### observation_stations(latitude:, longitude:)
+Fetches a list of nearby weather observation stations.
+
+### current_weather(latitude:, longitude:)
+Fetches the current weather conditions from the closest observation station.
+
 
 ## Development
 
