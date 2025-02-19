@@ -9,7 +9,8 @@ Gem::Specification.new do |spec|
   spec.email = ["108019276+JeffreyMPrice@users.noreply.github.com"]
 
   spec.summary = "Ruby wrapper for the Weather.gov API"
-  spec.description = "A Ruby gem for accessing weather data from the National Weather Service (weather.gov) API. Provides a simple interface to fetch weather data for US locations."
+  spec.description = "A Ruby gem for accessing weather data from the National Weather Service (weather.gov) API.
+    Provides a simple interface to fetch weather data for US locations."
   spec.homepage = "https://github.com/JeffreyMPrice/weather_gov_api"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1.0"
