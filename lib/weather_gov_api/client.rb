@@ -18,6 +18,29 @@ module WeatherGovApi
       raise Error, "API request failed: #{e.message}"
     end
 
+    def observation_stations(latitude:, longitude:)
+      points_response = points(latitude: latitude, longitude: longitude)
+      stations_url = points_response.data.dig("properties", "observationStations")
+      raise Error, "No observation stations URL found in points response" unless stations_url
+
+      response = connection.get(stations_url.sub(BASE_URL, ""))
+      Response.new(response)
+    rescue Faraday::Error => e
+      raise Error, "API request failed: #{e.message}"
+    end
+
+    def current_weather(latitude:, longitude:)
+      stations_response = observation_stations(latitude: latitude, longitude: longitude)
+      station = stations_response.data.dig("features", 0)
+      raise Error, "No observation stations found" unless station
+
+      station_id = station.dig("properties", "stationIdentifier")
+      response = connection.get("/stations/#{station_id}/observations/latest")
+      Response.new(response)
+    rescue Faraday::Error => e
+      raise Error, "API request failed: #{e.message}"
+    end
+
     private
 
     def validate_coordinates(latitude, longitude)

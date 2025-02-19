@@ -128,5 +128,108 @@ RSpec.describe WeatherGovApi::Client do
         expect(response.data["title"]).to eq("Data Unavailable For Requested Point")
       end
     end
+
+    describe "#observation_stations" do
+      let(:points_response) do
+        {
+          "properties" => {
+            "observationStations" => "https://api.weather.gov/gridpoints/TOP/31,80/stations"
+          }
+        }
+      end
+
+      let(:stations_response) do
+        {
+          "features" => [
+            {
+              "properties" => {
+                "stationIdentifier" => "KTOP",
+                "name" => "TOPEKA FORBES FIELD"
+              }
+            }
+          ]
+        }
+      end
+
+      it "fetches observation stations for given coordinates" do
+        stub_request(:get, "https://api.weather.gov/points/39.0693,-95.6245")
+          .to_return(status: 200, body: points_response.to_json)
+
+        stub_request(:get, "https://api.weather.gov/gridpoints/TOP/31,80/stations")
+          .to_return(status: 200, body: stations_response.to_json)
+
+        response = client.observation_stations(latitude: 39.0693, longitude: -95.6245)
+        expect(response.data["features"].first["properties"]["stationIdentifier"]).to eq("KTOP")
+      end
+
+      it "raises error when stations URL is not found in points response" do
+        stub_request(:get, "https://api.weather.gov/points/39.0693,-95.6245")
+          .to_return(status: 200, body: { "properties" => {} }.to_json)
+
+        expect do
+          client.observation_stations(latitude: 39.0693, longitude: -95.6245)
+        end.to raise_error(WeatherGovApi::Error, "No observation stations URL found in points response")
+      end
+    end
+
+    describe "#current_weather" do
+      let(:points_response) do
+        {
+          "properties" => {
+            "observationStations" => "https://api.weather.gov/gridpoints/TOP/31,80/stations"
+          }
+        }
+      end
+
+      let(:stations_response) do
+        {
+          "features" => [
+            {
+              "properties" => {
+                "stationIdentifier" => "KTOP",
+                "name" => "TOPEKA FORBES FIELD"
+              }
+            }
+          ]
+        }
+      end
+
+      let(:weather_response) do
+        {
+          "properties" => {
+            "temperature" => {
+              "value" => 22.8,
+              "unitCode" => "unit:degC"
+            }
+          }
+        }
+      end
+
+      it "fetches current weather for given coordinates" do
+        stub_request(:get, "https://api.weather.gov/points/39.0693,-95.6245")
+          .to_return(status: 200, body: points_response.to_json)
+
+        stub_request(:get, "https://api.weather.gov/gridpoints/TOP/31,80/stations")
+          .to_return(status: 200, body: stations_response.to_json)
+
+        stub_request(:get, "https://api.weather.gov/stations/KTOP/observations/latest")
+          .to_return(status: 200, body: weather_response.to_json)
+
+        response = client.current_weather(latitude: 39.0693, longitude: -95.6245)
+        expect(response.data["properties"]["temperature"]["value"]).to eq(22.8)
+      end
+
+      it "raises error when no stations are found" do
+        stub_request(:get, "https://api.weather.gov/points/39.0693,-95.6245")
+          .to_return(status: 200, body: points_response.to_json)
+
+        stub_request(:get, "https://api.weather.gov/gridpoints/TOP/31,80/stations")
+          .to_return(status: 200, body: { "features" => [] }.to_json)
+
+        expect do
+          client.current_weather(latitude: 39.0693, longitude: -95.6245)
+        end.to raise_error(WeatherGovApi::Error, "No observation stations found")
+      end
+    end
   end
 end
