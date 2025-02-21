@@ -3,6 +3,23 @@
 require "weather_gov_api"
 require "webmock/rspec"
 require "json"
+require "simplecov"
+require "simplecov-cobertura"
+
+SimpleCov.start do
+  add_filter "/spec/"
+  add_filter "/vendor/"
+
+  enable_coverage :branch
+
+  formatter SimpleCov::Formatter::MultiFormatter.new([
+                                                       SimpleCov::Formatter::HTMLFormatter,
+                                                       SimpleCov::Formatter::CoberturaFormatter
+                                                     ])
+
+  minimum_coverage 90
+  minimum_coverage_by_file 80 # Optional: also enforce per-file minimum
+end
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

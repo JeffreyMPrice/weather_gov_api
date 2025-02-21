@@ -5,6 +5,34 @@ jobs:
       - image: ruby:3.3.5
     steps:
       - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: Run tests
+          command: |
+            bundle exec rspec
+            if [ "$(ruby -e 'require "json"; puts JSON.parse(File.read("coverage/.last_run.json"))["result"]["line"]')" -lt 90 ]; then
+              echo "Test coverage is less than 90%"
+              exit 1
+            fi
+
+      - store_artifacts:
+          path: coverage
+          destination: coverage
+
       - run:
           name: Set execute permissions
           command: chmod +x bin/console
