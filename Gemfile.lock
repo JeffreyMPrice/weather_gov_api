@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    weather_gov_api (0.2.0)
+    weather_gov_api (0.2.1)
       faraday (~> 2.0)
 
 GEM
