@@ -6,34 +6,8 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 3
-# Configuration parameters: EnforcedStyle, AllowedGems, Include.
-# SupportedStyles: Gemfile, gems.rb, gemspec
-# Include: **/*.gemspec, **/Gemfile, **/gems.rb
-Gemspec/DevelopmentDependencies:
-  Exclude:
-    - 'weather_gov_api.gemspec'
-
-# Offense count: 2
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: native, lf, crlf
-Layout/EndOfLine:
-  Exclude:
-    - 'spec/weather_gov_api_spec.rb'
-    - 'weather_gov_api.gemspec'
-
-# Offense count: 1
-# Configuration parameters: Prefixes, AllowedPatterns.
-# Prefixes: when, with, without
-RSpec/ContextWording:
-  Exclude:
-    - 'spec/weather_gov_api/client_spec.rb'
-
 # Offense count: 10
 # Configuration parameters: CountAsOne.
 RSpec/ExampleLength:
   Max: 22
 
-# Offense count: 5
-RSpec/MultipleExpectations:
-  Max: 4

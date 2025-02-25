@@ -28,3 +28,7 @@ Metrics/BlockLength:
   Exclude:
     - "spec/**/*"
     - "*.gemspec"
+
+# Allow multiple exceptions
+RSpec/MultipleExpectations:
+  Max: 4

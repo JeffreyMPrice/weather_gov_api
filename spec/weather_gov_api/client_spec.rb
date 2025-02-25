@@ -18,7 +18,7 @@ RSpec.describe WeatherGovApi::Client do
   end
 
   describe "API interactions" do
-    context "getting points data" do
+    context "when getting points data" do
       let(:latitude) { 39.7456 }
       let(:longitude) { -97.0892 }
       let(:endpoint) { "https://api.weather.gov/points/#{latitude},#{longitude}" }

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.2] - 2025-02-21
+- tackled rubocop_todo list
+
+## [0.2.1] - 2025-02-21
+- added rubocop_todo
+- added simplecov and rubycritic
+- updated CircleCI to require 90% overall and 80% on a file for test coverage
+
 ## [0.2.0] - 2025-02-19
 
 ### Added
@@ -9,7 +17,6 @@
 ## [0.1.0] - Initial Release
 
 ### Added
-- Basic client implementation
 - Basic client implementation for weather.gov API
 - `points` method for fetching weather data by coordinates
   - Error handling for:
