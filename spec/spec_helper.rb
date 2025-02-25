@@ -5,6 +5,7 @@ require "webmock/rspec"
 require "json"
 require "simplecov"
 require "simplecov-cobertura"
+require "debug"
 
 SimpleCov.start do
   add_filter "/spec/"

@@ -101,6 +101,7 @@ RSpec.describe WeatherGovApi::Client do
         end.to raise_error(ArgumentError, /Invalid longitude/)
       end
 
+      # rubocop:disable RSpec/ExampleLength
       it "handles non-US coordinates" do
         non_us_latitude = 48.8575
         non_us_longitude = 2.3514
@@ -127,6 +128,7 @@ RSpec.describe WeatherGovApi::Client do
         expect(response.data["type"]).to eq("https://api.weather.gov/problems/InvalidPoint")
         expect(response.data["title"]).to eq("Data Unavailable For Requested Point")
       end
+      # rubocop:enable RSpec/ExampleLength
     end
 
     describe "#observation_stations" do

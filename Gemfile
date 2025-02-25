@@ -6,6 +6,7 @@ source "https://rubygems.org"
 gemspec
 
 group :development do
+  gem "debug"
   gem "flay", require: false
   gem "flog", require: false
   gem "rake", "~> 13.0"
