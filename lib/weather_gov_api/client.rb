@@ -15,7 +15,7 @@ module WeatherGovApi
       response = connection.get("/points/#{latitude},#{longitude}")
       Response.new(response)
     rescue Faraday::Error => e
-      raise Error, "API request failed: #{e.message}"
+      raise Error, "API failed: #{e.message}"
     end
 
     def observation_stations(latitude:, longitude:)
