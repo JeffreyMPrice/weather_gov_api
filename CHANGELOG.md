@@ -2,6 +2,10 @@
 
 ## [0.2.2] - 2025-02-21
 
+### Added
+- .ruby-version
+- vsc recommend plugins
+
 ### Fixed
 - tackled rubocop_todo list
 - fixed CodeQL rb/request-forgery error by ensuring same host

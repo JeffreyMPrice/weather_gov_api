@@ -22,6 +22,7 @@ module WeatherGovApi
       points_response = points(latitude: latitude, longitude: longitude)
       stations_url = points_response.data.dig("properties", "observationStations")
       raise Error, "No observation stations URL found in points response" unless stations_url
+
       stations_path = observation_stations_path(stations_url)
 
       response = connection.get(stations_path)
@@ -46,9 +47,8 @@ module WeatherGovApi
 
     def observation_stations_path(url)
       uri = URI.parse(url)
-      unless uri.host == URI.parse(BASE_URL).host
-        raise Error, "Invalid observation stations URL: #{url}"
-      end
+      raise Error, "Invalid observation stations URL: #{url}" unless uri.host == URI.parse(BASE_URL).host
+
       uri.path
     end
 
