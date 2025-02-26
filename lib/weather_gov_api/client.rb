@@ -23,7 +23,9 @@ module WeatherGovApi
       stations_url = points_response.data.dig("properties", "observationStations")
       raise Error, "No observation stations URL found in points response" unless stations_url
 
-      response = connection.get(stations_url.sub(BASE_URL, ""))
+      stations_path = observation_stations_path(stations_url)
+
+      response = connection.get(stations_path)
       Response.new(response)
     rescue Faraday::Error => e
       raise Error, "API request failed: #{e.message}"
@@ -42,6 +44,13 @@ module WeatherGovApi
     end
 
     private
+
+    def observation_stations_path(url)
+      uri = URI.parse(url)
+      raise Error, "Invalid observation stations URL: #{url}" unless uri.host == URI.parse(BASE_URL).host
+
+      uri.path
+    end
 
     def validate_coordinates(latitude, longitude)
       raise ArgumentError, "Invalid latitude: must be between -90 and 90" unless latitude.between?(-90, 90)

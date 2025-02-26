@@ -1,11 +1,20 @@
 # Changelog
 
 ## [0.2.2] - 2025-02-21
+
+### Added
+- .ruby-version
+- vsc recommend plugins
+
+### Fixed
 - tackled rubocop_todo list
+- fixed CodeQL rb/request-forgery error by ensuring same host
 
 ## [0.2.1] - 2025-02-21
-- added rubocop_todo
-- added simplecov and rubycritic
+
+### Added
+- rubocop_todo
+- simplecov and rubycritic
 - updated CircleCI to require 90% overall and 80% on a file for test coverage
 
 ## [0.2.0] - 2025-02-19
