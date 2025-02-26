@@ -172,6 +172,21 @@ RSpec.describe WeatherGovApi::Client do
           client.observation_stations(latitude: 39.0693, longitude: -95.6245)
         end.to raise_error(WeatherGovApi::Error, "No observation stations URL found in points response")
       end
+
+      it "raises error when stations URL is from a different domain" do
+        points_response_with_bad_url = {
+          "properties" => {
+            "observationStations" => "https://malicious.com/stations"
+          }
+        }
+
+        stub_request(:get, "https://api.weather.gov/points/39.0693,-95.6245")
+          .to_return(status: 200, body: points_response_with_bad_url.to_json)
+
+        expect do
+          client.observation_stations(latitude: 39.0693, longitude: -95.6245)
+        end.to raise_error(WeatherGovApi::Error, "Invalid observation stations URL: https://malicious.com/stations")
+      end
     end
 
     describe "#current_weather" do
