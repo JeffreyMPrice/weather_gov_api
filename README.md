@@ -76,9 +76,6 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/Jeffre
   - [ ] Distributed rate limiting (Redis/DB-based)
 - [ ] Add caching support for API responses
 - [ ] Automate CHANGELOG.md updates during release process
-- [ ] Configure Git repository settings:
-  - [ ] Disable direct commits to main branch
-  - [ ] Require passing CI builds for branch merges
 
 ## License
 
