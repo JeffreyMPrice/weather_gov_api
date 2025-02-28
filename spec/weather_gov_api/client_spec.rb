@@ -43,20 +43,6 @@ RSpec.describe WeatherGovApi::Client do
         expect(response.data).to include("properties")
       end
 
-      it "handles 404 errors for invalid coordinates" do
-        stub_request(:get, endpoint)
-          .with(headers: headers)
-          .to_return(
-            status: 404,
-            body: '{"detail": "No points found for coordinates"}',
-            headers: { "Content-Type" => "application/json" }
-          )
-
-        response = client.points(latitude: latitude, longitude: longitude)
-        expect(response).not_to be_success
-        expect(response.status).to eq(404)
-      end
-
       it "raises an error for network timeouts" do
         stub_request(:get, endpoint)
           .with(headers: headers)
@@ -64,7 +50,7 @@ RSpec.describe WeatherGovApi::Client do
 
         expect do
           client.points(latitude: latitude, longitude: longitude)
-        end.to raise_error(WeatherGovApi::Error, /API request failed/)
+        end.to raise_error(WeatherGovApi::ApiError, "API request failed: execution expired")
       end
 
       it "raises an error for network connection errors" do
@@ -74,7 +60,7 @@ RSpec.describe WeatherGovApi::Client do
 
         expect do
           client.points(latitude: latitude, longitude: longitude)
-        end.to raise_error(WeatherGovApi::Error, /API request failed/)
+        end.to raise_error(WeatherGovApi::ApiError, "API request failed: Failed to connect")
       end
 
       it "handles server errors (500)" do
@@ -86,22 +72,29 @@ RSpec.describe WeatherGovApi::Client do
             headers: { "Content-Type" => "application/json" }
           )
 
-        response = client.points(latitude: latitude, longitude: longitude)
-        expect(response).not_to be_success
-        expect(response.status).to eq(500)
-      end
-
-      it "validates coordinate inputs" do
         expect do
-          client.points(latitude: 91, longitude: longitude)
-        end.to raise_error(ArgumentError, /Invalid latitude/)
-
-        expect do
-          client.points(latitude: latitude, longitude: 181)
-        end.to raise_error(ArgumentError, /Invalid longitude/)
+          client.points(latitude: latitude, longitude: longitude)
+        end.to raise_error(WeatherGovApi::ApiError, "Internal Server Error")
       end
 
       # rubocop:disable RSpec/ExampleLength
+      it "handles invalid coordinate points" do
+        invalid_latitude = 9.7456
+        invalid_longitude = -200.0892
+        invalid_point_endpoint = "https://api.weather.gov/points/#{invalid_latitude},#{invalid_longitude}"
+
+        stub_request(:get, invalid_point_endpoint)
+          .with(headers: headers)
+          .to_return(
+            status: 400,
+            body: fixture("points_400_invalid_coordinate_response.json"),
+            headers: { "Content-Type" => "application/json" }
+          )
+        expect do
+          client.points(latitude: invalid_latitude, longitude: invalid_longitude)
+        end.to raise_error(WeatherGovApi::ApiError, "Invalid Parameter")
+      end
+
       it "handles non-US coordinates" do
         non_us_latitude = 48.8575
         non_us_longitude = 2.3514
@@ -111,22 +104,13 @@ RSpec.describe WeatherGovApi::Client do
           .with(headers: headers)
           .to_return(
             status: 404,
-            body: {
-              correlationId: "1b57faad",
-              title: "Data Unavailable For Requested Point",
-              type: "https://api.weather.gov/problems/InvalidPoint",
-              status: 404,
-              detail: "Unable to provide data for requested point #{non_us_latitude},#{non_us_longitude}",
-              instance: "https://api.weather.gov/requests/1b57faad"
-            }.to_json,
+            body: fixture("points_non_us_cords_response.json"),
             headers: { "Content-Type" => "application/json" }
           )
 
-        response = client.points(latitude: non_us_latitude, longitude: non_us_longitude)
-        expect(response).not_to be_success
-        expect(response.status).to eq(404)
-        expect(response.data["type"]).to eq("https://api.weather.gov/problems/InvalidPoint")
-        expect(response.data["title"]).to eq("Data Unavailable For Requested Point")
+        expect do
+          client.points(latitude: non_us_latitude, longitude: non_us_longitude)
+        end.to raise_error(WeatherGovApi::ApiError, "Data Unavailable For Requested Point")
       end
       # rubocop:enable RSpec/ExampleLength
     end
@@ -170,7 +154,7 @@ RSpec.describe WeatherGovApi::Client do
 
         expect do
           client.observation_stations(latitude: 39.0693, longitude: -95.6245)
-        end.to raise_error(WeatherGovApi::Error, "No observation stations URL found in points response")
+        end.to raise_error(WeatherGovApi::ApiError, "No observation stations URL found in points response")
       end
 
       it "raises error when stations URL is from a different domain" do
@@ -185,7 +169,7 @@ RSpec.describe WeatherGovApi::Client do
 
         expect do
           client.observation_stations(latitude: 39.0693, longitude: -95.6245)
-        end.to raise_error(WeatherGovApi::Error, "Invalid observation stations URL: https://malicious.com/stations")
+        end.to raise_error(WeatherGovApi::ApiError, "Invalid observation stations URL: https://malicious.com/stations")
       end
     end
 
@@ -245,7 +229,39 @@ RSpec.describe WeatherGovApi::Client do
 
         expect do
           client.current_weather(latitude: 39.0693, longitude: -95.6245)
-        end.to raise_error(WeatherGovApi::Error, "No observation stations found")
+        end.to raise_error(WeatherGovApi::ApiError, "No observation stations found")
+      end
+    end
+
+    describe "#raise_api_error" do
+      let(:valid_response) do
+        instance_double(Faraday::Response, success?: false, status: 400,
+                                           body: '{"type": "about:blank",
+                                                   "title": "Invalid Parameter",
+                                                   "status": 400,
+                                                   "detail": "The parameter is invalid.",
+                                                   "instance": "https://api.weather.gov/requests/1b57faad"}')
+      end
+
+      it "raises an error if the response is not successful" do
+        expect do
+          client.send(:raise_api_error, valid_response)
+        end.to raise_error(WeatherGovApi::ApiError)
+      end
+
+      it "does nothing if the response is successful" do
+        successful_response = instance_double(Faraday::Response, success?: true)
+        expect do
+          client.send(:raise_api_error, successful_response)
+        end.not_to raise_error
+      end
+
+      it "raises an error if the api response body cannot be parsed" do
+        bad_response = instance_double(Faraday::Response, success?: false, status: 500, body: "not_json")
+
+        expect do
+          client.send(:raise_api_error, bad_response)
+        end.to raise_error(WeatherGovApi::ApiError)
       end
     end
   end

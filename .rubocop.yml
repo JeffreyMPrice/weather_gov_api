@@ -29,6 +29,10 @@ Metrics/BlockLength:
     - "spec/**/*"
     - "*.gemspec"
 
+Metrics/ParameterLists:
+  CountKeywordArgs:
+    Enabled: false
+
 # Allow multiple exceptions
 RSpec/MultipleExpectations:
   Max: 4

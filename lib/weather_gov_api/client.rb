@@ -11,20 +11,20 @@ module WeatherGovApi
     end
 
     def points(latitude:, longitude:)
-      validate_coordinates(latitude, longitude)
       response = connection.get("/points/#{latitude},#{longitude}")
       raise_api_error(response) unless response.success?
       Response.new(response)
     rescue Faraday::Error => e
-      raise ApiError.new(message: "API request failed: #{e.message}")
+      raise WeatherGovApi::ApiError.new(message: "API request failed: #{e.message}")
     end
 
-
+    # rubocop:disable Metrics/MethodLength
     def observation_stations(latitude:, longitude:)
       points_response = points(latitude: latitude, longitude: longitude)
       stations_url = points_response.data.dig("properties", "observationStations")
-      raise ApiError.new(message: "No observation stations URL found in points response") unless stations_url
-
+      unless stations_url
+        raise WeatherGovApi::ApiError.new(message: "No observation stations URL found in points response")
+      end
 
       stations_path = observation_stations_path(stations_url)
 
@@ -32,37 +32,32 @@ module WeatherGovApi
       raise_api_error(response) unless response.success?
       Response.new(response)
     rescue Faraday::Error => e
-      raise ApiError.new(message: "API request failed: #{e.message}")
+      raise WeatherGovApi::ApiError.new(message: "API request failed: #{e.message}")
     end
+    # rubocop:enable Metrics/MethodLength
 
     def current_weather(latitude:, longitude:)
       stations_response = observation_stations(latitude: latitude, longitude: longitude)
       station = stations_response.data.dig("features", 0)
-      raise ApiError.new(message: "No observation stations found") unless station
+      raise WeatherGovApi::ApiError.new(message: "No observation stations found") unless station
 
       station_id = station.dig("properties", "stationIdentifier")
       response = connection.get("/stations/#{station_id}/observations/latest")
       raise_api_error(response) unless response.success?
       Response.new(response)
     rescue Faraday::Error => e
-      raise ApiError.new(message: "API request failed: #{e.message}")
+      raise WeatherGovApi::ApiError.new(message: "API request failed: #{e.message}")
     end
 
     private
 
     def observation_stations_path(url)
       uri = URI.parse(url)
-      raise ApiError.new(message: "Invalid observation stations URL: #{url}") unless uri.host == URI.parse(BASE_URL).host
+      unless uri.host == URI.parse(BASE_URL).host
+        raise WeatherGovApi::ApiError.new(message: "Invalid observation stations URL: #{url}")
+      end
 
       uri.path
-    end
-
-    def validate_coordinates(latitude, longitude)
-      raise ArgumentError, "Invalid latitude: must be between -90 and 90" unless latitude.between?(-90, 90)
-
-      return if longitude.between?(-180, 180)
-
-      raise ArgumentError, "Invalid longitude: must be between -180 and 180"
     end
 
     def connection
@@ -73,23 +68,25 @@ module WeatherGovApi
       end
     end
 
-    # Method to handle API errors based on ProblemDetail
+    # rubocop:disable Metrics/MethodLength
     def raise_api_error(response)
       return if response.success?
 
       begin
         error_data = JSON.parse(response.body)
       rescue JSON::ParserError
-        raise ApiError.new(message: "API request failed with status #{response.status} but could not parse error response.")
+        raise WeatherGovApi::ApiError.new(message: "API request failed with status #{response.status}\
+            but could not parse error response.")
       end
-      
-      raise ApiError.new(
+
+      raise WeatherGovApi::ApiError.new(
         type: error_data["type"],
         title: error_data["title"],
         status: error_data["status"],
         detail: error_data["detail"],
         instance: error_data["instance"]
       )
-    end    
+    end
+    # rubocop:enable Metrics/MethodLength
   end
 end

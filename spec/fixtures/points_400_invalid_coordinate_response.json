@@ -1,0 +1,8 @@
+{
+    "correlationId": "132462fb",
+    "title": "Invalid Parameter",
+    "type": "https://api.weather.gov/problems/InvalidParameter",
+    "status": 400,
+    "detail": "Parameter \"point\" is invalid: '9.7456,-200.0892' does not appear to be a valid coordinate",
+    "instance": "https://api.weather.gov/requests/132462fb"
+}

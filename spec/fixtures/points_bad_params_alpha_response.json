@@ -1,0 +1,14 @@
+{
+    "correlationId": "4af9d4df",
+    "parameterErrors": [
+        {
+            "parameter": "path.point",
+            "message": "Does not match the regex pattern ^(-?\\d+(?:\\.\\d+)?),(-?\\d+(?:\\.\\d+)?)$"
+        }
+    ],
+    "title": "Not Found",
+    "type": "https://api.weather.gov/problems/NotFound",
+    "status": 404,
+    "detail": "Not Found",
+    "instance": "https://api.weather.gov/requests/4af9d4df"
+}
