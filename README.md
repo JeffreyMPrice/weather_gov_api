@@ -70,7 +70,6 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/Jeffre
 
 - [ ] Implement forecast retrieval functionality
 - [ ] Add validation to limit latitude and longitude to 4 decimal places (weather.gov API requirement)
-- [ ] Improve error handling to properly surface weather.gov API error messages
 - [ ] Implement rate limiting strategies:
   - [ ] Local rate limiting
   - [ ] Distributed rate limiting (Redis/DB-based)
