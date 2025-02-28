@@ -1,10 +1,11 @@
 # Changelog
 
-## [0.2.2] - 2025-02-21
+## [0.3.0] - 2025-02-28
 
 ### Added
-- .ruby-version
-- vsc recommend plugins
+- Updated version handling adding WeatherGovApi::ApiError
+- added .ruby-version
+- added .vsc recommend plugins
 
 ### Fixed
 - tackled rubocop_todo list
