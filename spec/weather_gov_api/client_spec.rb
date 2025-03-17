@@ -37,7 +37,7 @@ RSpec.describe WeatherGovApi::Client do
       end
 
       it "fetches weather data for specific coordinates" do
-        stubs.get("/points/#{latitude},#{longitude}") do |env|
+        stubs.get("/points/#{latitude},#{longitude}") do |_env|
           [
             200,
             headers,
@@ -63,7 +63,7 @@ RSpec.describe WeatherGovApi::Client do
       end
 
       it "raises an error for network connection errors" do
-        stubs.get(endpoint) { raise Faraday::ConnectionFailed.new("Failed to connect") }
+        stubs.get(endpoint) { raise Faraday::ConnectionFailed, "Failed to connect" }
 
         expect do
           client.points(latitude: latitude, longitude: longitude)
@@ -210,7 +210,7 @@ RSpec.describe WeatherGovApi::Client do
         expect do
           client.observation_stations(latitude: 39.0693, longitude: -95.6245)
         end.to raise_error(WeatherGovApi::ApiError, "Invalid observation stations URL: https://malicious.com/stations")
-        
+
         stubs.verify_stubbed_calls
       end
     end
@@ -324,7 +324,7 @@ RSpec.describe WeatherGovApi::Client do
         successful_response = instance_double(Faraday::Response, success?: true)
         expect do
           client.send(:raise_api_error, successful_response)
-        end.to_not raise_error
+        end.not_to raise_error
       end
 
       it "raises an error if the api response body cannot be parsed" do
