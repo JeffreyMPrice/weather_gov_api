@@ -17,5 +17,4 @@ group :development do
   gem "simplecov", require: false
   gem "simplecov-cobertura", require: false # For CircleCI coverage reports
   gem "vcr", "~> 6.0", require: false
-  gem "webmock", "~> 3.0"
 end
