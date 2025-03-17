@@ -38,4 +38,4 @@ RSpec/MultipleExpectations:
   Max: 4
 
 RSpec/ExampleLength:
-  Max: 10 # Adjust this value as needed
+  Max: 30 # Adjust this value as needed

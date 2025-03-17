@@ -88,7 +88,6 @@ RSpec.describe WeatherGovApi::Client do
         stubs.verify_stubbed_calls
       end
 
-      # rubocop:disable RSpec/ExampleLength
       it "handles invalid coordinate points" do
         invalid_latitude = 9.7456
         invalid_longitude = -200.0892
@@ -128,7 +127,6 @@ RSpec.describe WeatherGovApi::Client do
 
         stubs.verify_stubbed_calls
       end
-      # rubocop:enable RSpec/ExampleLength
     end
 
     describe "#observation_stations" do

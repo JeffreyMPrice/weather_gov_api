@@ -4,7 +4,7 @@ require "spec_helper"
 
 RSpec.describe WeatherGovApi::ApiError do
   describe "#initialize" do
-    # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations
+    # rubocop:disable RSpec/MultipleExpectations
     it "sets the attributes correctly" do
       error = described_class.new(
         type: "https://api.weather.gov/problems/InvalidPoint",
@@ -24,7 +24,7 @@ RSpec.describe WeatherGovApi::ApiError do
       expect(error.correlation_id).to eq("abc-123")
       expect(error.message).to eq("Custom message")
     end
-    # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
+    # rubocop:enable RSpec/MultipleExpectations
 
     it "defaults to title or detail as message if no message is provided" do
       error1 = described_class.new(title: "Invalid Point", detail: "The requested point is not valid.")
