@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "weather_gov_api"
-require "webmock/rspec"
 require "json"
 require "simplecov"
 require "simplecov-cobertura"
