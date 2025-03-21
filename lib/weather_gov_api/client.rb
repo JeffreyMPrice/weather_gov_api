@@ -49,6 +49,19 @@ module WeatherGovApi
       raise WeatherGovApi::ApiError.new(message: "API request failed: #{e.message}")
     end
 
+    def forecast(latitude:, longitude:)
+      grid_data = points(latitude: latitude, longitude: longitude).data["properties"]
+      grid_id = grid_data["gridId"]
+      grid_x = grid_data["gridX"]
+      grid_y = grid_data["gridY"]
+
+      response = connection.get("/gridpoints/#{grid_id}/#{grid_x},#{grid_y}/forecast")
+      raise_api_error(response) unless response.success?
+      Response.new(response)
+    rescue Faraday::Error => e
+      raise WeatherGovApi::ApiError.new(message: "API request failed: #{e.message}")
+    end
+
     private
 
     def observation_stations_path(url)

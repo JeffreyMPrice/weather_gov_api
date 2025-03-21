@@ -130,6 +130,8 @@ RSpec.describe WeatherGovApi::Client do
     end
 
     describe "#observation_stations" do
+      let(:latitude) { 39.7456 }
+      let(:longitude) { -97.0892 }
       let(:points_response) do
         {
           "properties" => {
@@ -152,24 +154,24 @@ RSpec.describe WeatherGovApi::Client do
       end
 
       it "fetches observation stations for given coordinates" do
-        stubs.get("/points/39.0693,-95.6245") do
+        stubs.get("/points/#{latitude},#{longitude}") do
           [
             200,
             { "Content-Type" => "application/json" },
-            points_response.to_json
+            fixture("points_response.json")
           ]
         end
 
-        stubs.get("/gridpoints/TOP/31,80/stations") do
+        stubs.get("/gridpoints/TOP/32,81/stations") do
           [
             200,
             { "Content-Type" => "application/json" },
-            stations_response.to_json
+            fixture("observation_stations_response.json")
           ]
         end
 
-        response = client.observation_stations(latitude: 39.0693, longitude: -95.6245)
-        expect(response.data["features"].first["properties"]["stationIdentifier"]).to eq("KTOP")
+        response = client.observation_stations(latitude: latitude, longitude: longitude)
+        expect(response.data["features"].first["properties"]["stationIdentifier"]).to eq("KMYZ")
 
         stubs.verify_stubbed_calls
       end
@@ -301,37 +303,70 @@ RSpec.describe WeatherGovApi::Client do
         stubs.verify_stubbed_calls
       end
     end
+  end
 
-    describe "#raise_api_error" do
-      let(:valid_response) do
-        instance_double(Faraday::Response, success?: false, status: 400,
-                                           body: '{"type": "about:blank",
+  describe "#forecast" do
+    let(:latitude) { 39.7456 }
+    let(:longitude) { -97.0892 }
+    let(:headers) do
+      {
+        "Accept" => "application/json",
+        "User-Agent" => "Test User Agent"
+      }
+    end
+
+    it "fetches the forecast for a grid area" do
+      stubs.get("/points/#{latitude},#{longitude}") do
+        [
+          200,
+          { "Content-Type" => "application/json" },
+          fixture("points_response.json")
+        ]
+      end
+
+      stubs.get("/gridpoints/TOP/32,81/forecast") do
+        [
+          200,
+          headers,
+          fixture("gridpoints_forecast_response.json")
+        ]
+      end
+      response = client.forecast(latitude: latitude, longitude: longitude)
+      expect(response).to be_success
+      expect(response.data["properties"]["periods"].first["name"]).to eq("Tonight")
+      stubs.verify_stubbed_calls
+    end
+  end
+
+  describe "#raise_api_error" do
+    let(:valid_response) do
+      instance_double(Faraday::Response, success?: false, status: 400,
+                                         body: '{"type": "about:blank",
                                                    "title": "Invalid Parameter",
                                                    "status": 400,
                                                    "detail": "The parameter is invalid.",
                                                    "instance": "https://api.weather.gov/requests/1b57faad"}')
-      end
+    end
 
-      it "raises an error if the response is not successful" do
-        expect do
-          client.send(:raise_api_error, valid_response)
-        end.to raise_error(WeatherGovApi::ApiError)
-      end
+    it "raises an error if the response is not successful" do
+      expect do
+        client.send(:raise_api_error, valid_response)
+      end.to raise_error(WeatherGovApi::ApiError)
+    end
 
-      it "does nothing if the response is successful" do
-        successful_response = instance_double(Faraday::Response, success?: true)
-        expect do
-          client.send(:raise_api_error, successful_response)
-        end.not_to raise_error
-      end
+    it "does nothing if the response is successful" do
+      successful_response = instance_double(Faraday::Response, success?: true)
+      expect do
+        client.send(:raise_api_error, successful_response)
+      end.not_to raise_error
+    end
 
-      it "raises an error if the api response body cannot be parsed" do
-        bad_response = instance_double(Faraday::Response, success?: false, status: 500, body: "not_json")
+    it "raises an error if the api response body cannot be parsed" do
+      bad_response = instance_double(Faraday::Response, success?: false, status: 500, body: "not_json")
 
-        expect do
-          client.send(:raise_api_error, bad_response)
-        end.to raise_error(WeatherGovApi::ApiError)
-      end
+      expect do
+        client.send(:raise_api_error, bad_response)
+      end.to raise_error(WeatherGovApi::ApiError)
     end
   end
 end
