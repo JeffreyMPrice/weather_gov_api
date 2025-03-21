@@ -1,0 +1,19 @@
+{
+    "properties": {
+        "periods": [
+            {
+                "number": 1,
+                "name": "Tonight",
+                "startTime": "2024-02-29T18:00:00-06:00",
+                "endTime": "2024-03-01T06:00:00-06:00",
+                "isDaytime": false,
+                "temperature": 32,
+                "temperatureUnit": "F",
+                "windSpeed": "5 mph",
+                "windDirection": "N",
+                "shortForecast": "Clear",
+                "detailedForecast": "Clear, with a low around 32. North wind around 5 mph."
+            }
+        ]
+    }
+}
