@@ -39,6 +39,8 @@ Fetches a list of nearby weather observation stations.
 ### current_weather(latitude:, longitude:)
 Fetches the current weather conditions from the closest observation station.
 
+### forecast(latitude:, longitude:)
+Fetches the seven day forecast which will include a daytieme and nightime forecast.
 
 ## Development
 
@@ -68,12 +70,12 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/Jeffre
 
 ## TODO
 
-- [ ] Implement forecast retrieval functionality
 - [ ] Add validation to limit latitude and longitude to 4 decimal places (weather.gov API requirement)
 - [ ] Implement rate limiting strategies:
   - [ ] Local rate limiting
   - [ ] Distributed rate limiting (Redis/DB-based)
 - [ ] Add caching support for API responses
+- [ ] Memoize calls that might happen more than once (like points)
 - [ ] Automate CHANGELOG.md updates during release process
 
 ## License
