@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.4.0] - 2025-03-23
+
+### Added
+- Add Forecast method
+
+### Fixed
+- update URI gem
+- bump json from 2.10.1 to 2.10.2
+- Repalce webmock with Faraday stubs
+
 ## [0.3.0] - 2025-02-28
 
 ### Added
