@@ -216,37 +216,9 @@ RSpec.describe WeatherGovApi::Client do
     end
 
     describe "#current_weather" do
-      let(:points_response) do
-        {
-          "properties" => {
-            "observationStations" => "https://api.weather.gov/gridpoints/TOP/31,80/stations"
-          }
-        }
-      end
-
-      let(:stations_response) do
-        {
-          "features" => [
-            {
-              "properties" => {
-                "stationIdentifier" => "KTOP",
-                "name" => "TOPEKA FORBES FIELD"
-              }
-            }
-          ]
-        }
-      end
-
-      let(:weather_response) do
-        {
-          "properties" => {
-            "temperature" => {
-              "value" => 22.8,
-              "unitCode" => "unit:degC"
-            }
-          }
-        }
-      end
+      let(:points_response) { build(:points_response) }
+      let(:stations_response) { build(:stations_response) }
+      let(:weather_response) { build(:weather_response) }
 
       it "fetches current weather for given coordinates" do
         stubs.get("/points/39.0693,-95.6245") do
