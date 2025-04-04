@@ -5,6 +5,7 @@ require "json"
 require "simplecov"
 require "simplecov-cobertura"
 require "debug"
+require "factory_bot"
 
 SimpleCov.start do
   add_filter "/spec/"
@@ -31,6 +32,11 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.include FactoryBot::Syntax::Methods
+  # Automatically load all factories in the spec/factories directory
+  FactoryBot.definition_file_paths = [File.expand_path("factories", __dir__)]
+  FactoryBot.find_definitions
 end
 
 def fixture_path
