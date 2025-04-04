@@ -7,6 +7,7 @@ gemspec
 
 group :development do
   gem "debug"
+  gem "factory_bot", "~> 6.5"
   gem "flay", require: false
   gem "flog", require: false
   gem "rake", "~> 13.0"
