@@ -1,13 +1,15 @@
-class ExampleModel
-  attr_accessor :attribute_1, :attribute_2
+# frozen_string_literal: true
 
-  def initialize(attribute_1: nil, attribute_2: nil)
-    @attribute_1 = attribute_1
-    @attribute_2 = attribute_2
+class ExampleModel
+  attr_accessor :attribute1, :attribute2
+
+  def initialize(attribute1: nil, attribute2: nil)
+    @attribute1 = attribute1
+    @attribute2 = attribute2
   end
 end
 
-RSpec.describe "FactoryBot Integration" do
+RSpec.describe "ExampleModel" do
   it "creates a valid factory" do
     example = build(:example_model)
     expect(example).to be_a(ExampleModel)
