@@ -2,14 +2,25 @@
 
 FactoryBot.define do
   factory :weather_response, class: Hash do
-    initialize_with { attributes.stringify_keys }
-    properties do
+    transient do
+      temperature { 22.8 }
+    end
+
+    initialize_with do
       {
-        "temperature" => {
-          "value" => 22.8,
-          "unitCode" => "unit:degC"
+        "properties" => {
+          "temperature" => { "value" => temperature,
+                             "unitCode" => "unit:degC" }
         }
-      }
+      }.stringify_keys
+    end
+
+    trait :cold_weather do
+      temperature { -5.0 }
+    end
+
+    trait :hot_weather do
+      temperature { 35.0 }
     end
   end
 end

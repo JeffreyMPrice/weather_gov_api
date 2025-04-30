@@ -29,6 +29,10 @@ RSpec.describe WeatherGovApi::Client do
       let(:latitude) { 39.7456 }
       let(:longitude) { -97.0892 }
       let(:endpoint) { "/points/#{latitude},#{longitude}" }
+      let(:points_response) { build(:points_response, grid_id: "TOP", grid_x: 31, grid_y: 80) }
+      let(:non_us_points_response) { build(:points_response, :non_us_coordinates) }
+      let(:invalid_points_response) { build(:points_response, :invalid_coordinates) }
+
       let(:headers) do
         {
           "Accept" => "application/json",
@@ -41,7 +45,7 @@ RSpec.describe WeatherGovApi::Client do
           [
             200,
             headers,
-            fixture("points_response.json")
+            points_response.to_json
           ]
         end
 
@@ -97,7 +101,7 @@ RSpec.describe WeatherGovApi::Client do
           [
             400,
             { "Content-Type" => "application/json" },
-            fixture("points_400_invalid_coordinate_response.json")
+            invalid_points_response.to_json
           ]
         end
 
@@ -117,7 +121,7 @@ RSpec.describe WeatherGovApi::Client do
           [
             404,
             { "Content-Type" => "application/json" },
-            fixture("points_non_us_cords_response.json")
+            non_us_points_response.to_json
           ]
         end
 
@@ -132,41 +136,23 @@ RSpec.describe WeatherGovApi::Client do
     describe "#observation_stations" do
       let(:latitude) { 39.7456 }
       let(:longitude) { -97.0892 }
-      let(:points_response) do
-        {
-          "properties" => {
-            "observationStations" => "https://api.weather.gov/gridpoints/TOP/31,80/stations"
-          }
-        }
-      end
-
-      let(:stations_response) do
-        {
-          "features" => [
-            {
-              "properties" => {
-                "stationIdentifier" => "KTOP",
-                "name" => "TOPEKA FORBES FIELD"
-              }
-            }
-          ]
-        }
-      end
+      let(:points_response) { build(:points_response, grid_id: "KMYZ", grid_x: 32, grid_y: 81) }
+      let(:stations_response) { build(:stations_response, station_identifier: "KMYZ") }
 
       it "fetches observation stations for given coordinates" do
         stubs.get("/points/#{latitude},#{longitude}") do
           [
             200,
             { "Content-Type" => "application/json" },
-            fixture("points_response.json")
+            points_response.to_json
           ]
         end
 
-        stubs.get("/gridpoints/TOP/32,81/stations") do
+        stubs.get("/gridpoints/KMYZ/32,81/stations") do
           [
             200,
             { "Content-Type" => "application/json" },
-            fixture("observation_stations_response.json")
+            stations_response.to_json
           ]
         end
 
