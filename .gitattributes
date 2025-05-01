@@ -1,0 +1,8 @@
+# Enforce LF for all text files
+* text=auto
+
+# Explicitly enforce LF for specific file types
+*.rb text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.md text eol=lf
