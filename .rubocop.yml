@@ -39,3 +39,9 @@ RSpec/MultipleExpectations:
 
 RSpec/ExampleLength:
   Max: 30 # Adjust this value as needed
+
+RSpec/SpecFilePathFormat:
+  Enabled: true
+  CustomTransform:
+    WeatherGovApi::Client: weather_gov_api/client*
+  IgnoreMethods: true
