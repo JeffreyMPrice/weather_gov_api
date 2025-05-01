@@ -7,6 +7,12 @@ RSpec.describe WeatherGovApi::Client do
   let(:client) { described_class.new(user_agent: "Test User Agent") }
   let(:stubs) { Faraday::Adapter::Test::Stubs.new }
   let(:connection) { Faraday.new { |builder| builder.adapter :test, stubs } }
+  let(:default_headers) do
+    {
+      "Accept" => "application/json",
+      "User-Agent" => "Test User Agent"
+    }
+  end
 
   before do
     allow(client).to receive(:connection).and_return(connection)
@@ -34,18 +40,11 @@ RSpec.describe WeatherGovApi::Client do
       let(:non_us_points_response) { build(:points_response, :non_us_coordinates) }
       let(:invalid_points_response) { build(:points_response, :invalid_coordinates) }
 
-      let(:headers) do
-        {
-          "Accept" => "application/json",
-          "User-Agent" => "Test User Agent"
-        }
-      end
-
       it "fetches weather data for specific coordinates" do
         stubs.get("/points/#{latitude},#{longitude}") do |_env|
           [
             200,
-            headers,
+            default_headers,
             points_response.to_json
           ]
         end
@@ -81,7 +80,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.get(endpoint) do
           [
             500,
-            { "Content-Type" => "application/json" },
+            default_headers,
             '{"detail": "Internal Server Error"}'
           ]
         end
@@ -101,7 +100,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.get(invalid_point_endpoint) do
           [
             400,
-            { "Content-Type" => "application/json" },
+            default_headers,
             invalid_points_response.to_json
           ]
         end
@@ -121,7 +120,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.get(non_us_endpoint) do
           [
             404,
-            { "Content-Type" => "application/json" },
+            default_headers,
             non_us_points_response.to_json
           ]
         end
@@ -145,7 +144,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.get("/points/#{latitude},#{longitude}") do
           [
             200,
-            { "Content-Type" => "application/json" },
+            default_headers,
             points_response.to_json
           ]
         end
@@ -153,7 +152,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.get("/gridpoints/KMYZ/32,81/stations") do
           [
             200,
-            { "Content-Type" => "application/json" },
+            default_headers,
             stations_response.to_json
           ]
         end
@@ -168,7 +167,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.get("/points/39.0693,-95.6245") do
           [
             200,
-            { "Content-Type" => "application/json" },
+            default_headers,
             { "properties" => {} }.to_json
           ]
         end
@@ -180,7 +179,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.verify_stubbed_calls
       end
 
-      it "raises error when stations URL is from a different domain" do
+      it "raises an error if observation stations URL is not from the weather.gov domain" do
         points_response_with_bad_url = {
           "properties" => {
             "observationStations" => "https://malicious.com/stations"
@@ -190,7 +189,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.get("/points/39.0693,-95.6245") do
           [
             200,
-            { "Content-Type" => "application/json" },
+            default_headers,
             points_response_with_bad_url.to_json
           ]
         end
@@ -212,7 +211,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.get("/points/39.0693,-95.6245") do
           [
             200,
-            { "Content-Type" => "application/json" },
+            default_headers,
             points_response.to_json
           ]
         end
@@ -220,7 +219,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.get("/gridpoints/TOP/31,80/stations") do
           [
             200,
-            { "Content-Type" => "application/json" },
+            default_headers,
             stations_response.to_json
           ]
         end
@@ -228,7 +227,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.get("/stations/KTOP/observations/latest") do
           [
             200,
-            { "Content-Type" => "application/json" },
+            default_headers,
             weather_response.to_json
           ]
         end
@@ -243,7 +242,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.get("/points/39.0693,-95.6245") do
           [
             200,
-            { "Content-Type" => "application/json" },
+            default_headers,
             points_response.to_json
           ]
         end
@@ -251,7 +250,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.get("/gridpoints/TOP/31,80/stations") do
           [
             200,
-            { "Content-Type" => "application/json" },
+            default_headers,
             { "features" => [] }.to_json
           ]
         end
@@ -268,18 +267,12 @@ RSpec.describe WeatherGovApi::Client do
   describe "#forecast" do
     let(:latitude) { 39.7456 }
     let(:longitude) { -97.0892 }
-    let(:headers) do
-      {
-        "Accept" => "application/json",
-        "User-Agent" => "Test User Agent"
-      }
-    end
 
     it "fetches the forecast for a grid area" do
       stubs.get("/points/#{latitude},#{longitude}") do
         [
           200,
-          { "Content-Type" => "application/json" },
+          default_headers,
           fixture("points_response.json")
         ]
       end
@@ -287,7 +280,7 @@ RSpec.describe WeatherGovApi::Client do
       stubs.get("/gridpoints/TOP/32,81/forecast") do
         [
           200,
-          headers,
+          default_headers,
           fixture("gridpoints_forecast_response.json")
         ]
       end
