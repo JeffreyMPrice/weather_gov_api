@@ -134,6 +134,7 @@ RSpec.describe WeatherGovApi::Client do
     end
     # rubocop:enable RSpec/MultipleMemoizedHelpers
 
+    # rubocop:disable RSpec/MultipleMemoizedHelpers
     describe "#observation_stations" do
       let(:latitude) { 39.7456 }
       let(:longitude) { -97.0892 }
@@ -201,6 +202,7 @@ RSpec.describe WeatherGovApi::Client do
         stubs.verify_stubbed_calls
       end
     end
+    # rubocop:enable RSpec/MultipleMemoizedHelpers
 
     describe "#current_weather" do
       let(:points_response) { build(:points_response) }
