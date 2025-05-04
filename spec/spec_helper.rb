@@ -5,6 +5,7 @@ require "json"
 require "simplecov"
 require "simplecov-cobertura"
 require "debug"
+require "factory_bot"
 
 SimpleCov.start do
   add_filter "/spec/"
@@ -21,6 +22,8 @@ SimpleCov.start do
   minimum_coverage_by_file 80 # Optional: also enforce per-file minimum
 end
 
+Dir[File.expand_path("support/**/*.rb", __dir__)].each { |f| require f }
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
@@ -31,6 +34,11 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.include FactoryBot::Syntax::Methods
+  # Automatically load all factories in the spec/factories directory
+  FactoryBot.definition_file_paths = [File.expand_path("factories", __dir__)]
+  FactoryBot.find_definitions
 end
 
 def fixture_path
