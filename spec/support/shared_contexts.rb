@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_context "with successful points request" do
   let(:latitude) { raise "latitude must be defined in the including context" }
   let(:longitude) { raise "longitude must be defined in the including context" }

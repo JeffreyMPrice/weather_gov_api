@@ -18,6 +18,7 @@ RSpec.describe WeatherGovApi::Client do
     allow(client).to receive(:connection).and_return(connection)
   end
 
+  # rubocop:disable RSpec/MultipleMemoizedHelpers
   describe "#observation_stations" do
     include_context "with successful points request"
     let(:latitude) { 39.7456 }
@@ -53,5 +54,6 @@ RSpec.describe WeatherGovApi::Client do
       end
     end
   end
+  # rubocop:enable RSpec/MultipleMemoizedHelpers
 end
 # rubocop:enable RSpec/SpecFilePathFormat
