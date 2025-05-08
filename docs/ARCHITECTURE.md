@@ -1,6 +1,7 @@
 # Architecture Document (ARCHITECTURE.md)
 
 ## **Overview**
+
 This document outlines the architecture for the WeatherGov Ruby Client, referencing the requirements defined in `docs/PRD.md`. The architecture is designed to meet the highest standards of quality, production-readiness, resilience, scalability, security, modularity, reusability, documentation, and testability. It provides a clear blueprint for building the system, ensuring alignment across all stakeholders.
 
 ---
@@ -8,7 +9,9 @@ This document outlines the architecture for the WeatherGov Ruby Client, referenc
 ## **High-Level Design**
 
 ### **1. Components**
+
 The WeatherGov Ruby Client consists of the following key components:
+
 1. **Client Interface**:
    - Provides a simple, intuitive API for interacting with weather.gov endpoints.
    - Supports methods for retrieving weather forecasts and alerts (Phase 1).
@@ -29,18 +32,20 @@ The WeatherGov Ruby Client consists of the following key components:
    - Supports basic logging to file or stdout, with optional integration for external log aggregation tools.
    - Logs are structured in JSON format for easier parsing and analysis. Example log entry:
 
-```json
-{
-  "timestamp": "2025-05-03T12:00:00Z",
-  "level": "ERROR",
-  "message": "API request failed",
-  "context": {
-    "endpoint": "/points/39.7456,-97.0892",
-    "status_code": 500,
-    "response_body": "Internal Server Error"
+  ```json
+  {
+    "timestamp": "2025-05-03T12:00:00Z",
+    "level": "ERROR",
+    "message": "API request failed",
+    "context": {
+      "endpoint": "/points/39.7456,-97.0892",
+      "status_code": 500,
+      "response_body": "Internal Server Error"
+    }
   }
-}
-```
+  ```
+
+<!-- markdownlint-disable-next-line MD029 -->
 7. **Testing and Documentation**:
    - Includes 100% unit test coverage using RSpec.
    - Generates developer-friendly documentation using YARD.
@@ -50,6 +55,7 @@ The WeatherGov Ruby Client consists of the following key components:
 ### **2. Component Interactions**
 
 #### **Request Flow**
+
 The following sequence diagram illustrates the flow of data during a successful API request with caching:
 
 ```mermaid

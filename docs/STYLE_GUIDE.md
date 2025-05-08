@@ -27,6 +27,7 @@ This style guide establishes clear, unambiguous rules for all developers and Cod
 - **Configuration**:
   - Store linter configurations in `.rubocop.yml`.
   - Example `.rubocop.yml`:
+
     ```yaml
     inherit_gem:
       rubocop: rubocop.yml
@@ -48,40 +49,48 @@ This style guide establishes clear, unambiguous rules for all developers and Cod
 ## **3. Naming Conventions**
 
 ### **Variables**
+
 - Use `snake_case` for variable and method names.
 - Use `UPPER_SNAKE_CASE` for constants.
 
 **Do**:
+
 ```ruby
 user_name = "John"
 API_KEY = ENV["API_KEY"]
 ```
 
 **Don't**:
+
 ```ruby
 UserName = "John"
 apiKey = ENV["API_KEY"]
 ```
 
 ### **Classes and Modules**
+
 - Use `CamelCase` for class and module names.
 
 **Do**:
+
 ```ruby
 class WeatherClient
 end
 ```
 
 **Don't**:
+
 ```ruby
 class weather_client
 end
 ```
 
 ### **Methods**
+
 - Use `snake_case` for method names.
 - Method names should clearly describe their purpose.
 - **Do**:
+
 ```ruby
   def fetch_weather_data
     # ...
@@ -89,23 +98,26 @@ end
 ```
 
 **Don't**:
+
 ```ruby
 def FetchWeather
   # ...
 end
 ```
 
-
 ### **Files**
+
 - Use `snake_case` for file names.
 - Name files after the class or module they define.
 
 **Do**:
+
 ```
 weather_client.rb
 ```
 
 **Don't**:
+
 ```
 WeatherClient.rb
 ```
@@ -116,7 +128,7 @@ WeatherClient.rb
 
 Adopt a modular folder structure for scalability and maintainability. Group related functionality together. For example:
 
-```
+```text
 lib/
 ├── weather_gov_api/       # Main library code
 │   ├── client.rb          # Client interface
@@ -137,6 +149,7 @@ docs/
 ```
 
 ### **Configuration Files**
+
 - Place all configuration files (e.g., `.rubocop.yml`, `.rspec`, `Gemfile`) in the root directory.
 - CI/CD scripts (e.g., `.circleci/config.yml`) should be placed in a `.circleci/` folder.
 
@@ -145,10 +158,12 @@ docs/
 ## **5. Component Design Patterns**
 
 ### **Classes and Methods**
+
 - Use small, single-responsibility classes.
 - Methods should do one thing and do it well.
 
 **Do**:
+
 ```ruby
 class ForecastFetcher
   def call
@@ -158,6 +173,7 @@ end
 ```
 
 **Don't**:
+
 ```ruby
 class Forecast
   def process_and_fetch_and_log_forecast
@@ -167,15 +183,18 @@ end
 ```
 
 ### **Error Handling**
+
 - Raise custom errors for non-recoverable issues (e.g., invalid input, API failures).
 - For recoverable errors, return error objects or codes.
 
 **Do**:
+
   ```ruby
   raise WeatherGovApi::InvalidInputError, "Latitude must be between -90 and 90"
   ```
 
 **Don't**:
+
 ```ruby
 raise "Something went wrong"
 ```
@@ -185,21 +204,26 @@ raise "Something went wrong"
 ## **6. Testing**
 
 ### **Unit Tests**
+
 - Use RSpec for unit testing.
 - Mock external API calls using WebMock or VCR.
 
 ### **Integration Tests**
+
 - Test the interaction between components (e.g., HTTP layer and data transformation).
 
 ### **Test File Structure**
+
 - Place unit tests in [weather_gov_api](http://_vscodecontentref_/4) and name files after the class being tested (e.g., `client_spec.rb`).
 - Place integration tests in `spec/integration/`.
 
 ### **Test Scope**
+
 - **Unit Tests**: Test individual methods or classes in isolation.
 - **Integration Tests**: Test interactions between components (e.g., HTTP layer and data transformation).
 
 ### **Coverage**
+
 - Use SimpleCov to ensure 100% test coverage.
 
 ---
@@ -212,17 +236,21 @@ raise "Something went wrong"
 - Regularly audit dependencies with `bundler-audit` or `dependabot`.
 
 ### **Sensitive Data Handling**
+
 - Store sensitive data (e.g., API keys) in environment variables.
 - Use the `dotenv` gem for local development.
 - **Do**:
+
   ```ruby
   API_KEY = ENV["WEATHER_API_KEY"]
   ```
 
 - **Don't**
+
   ```
   API_KEY = "hardcoded_key"
   ```
+
 ---
 
 ## **8. Documentation Standards**
@@ -232,6 +260,7 @@ raise "Something went wrong"
 - Include examples for common use cases.
 
 **Do**:
+
 ```ruby
 # WeatherClient interacts with the weather.gov API to fetch weather data.
 #
@@ -248,6 +277,7 @@ end
 ```
 
 **Don't**:
+
 ```ruby
 # forecast method
 def forecast(lat, lon)
@@ -259,6 +289,7 @@ end
 ## **9. Do's and Don'ts**
 
 ### **Do's**
+
 - Write clean, modular, and reusable code.
 - Follow the DRY (Don't Repeat Yourself) principle.
 - Use meaningful variable and method names.
@@ -266,8 +297,8 @@ end
 - Use dependency injection for better testability.
 - Write thread-safe code when using shared resources.
 
-
 ### **Don'ts**
+
 - Avoid using `puts` or `print` for logging; use a logger instead.
 - Don't leave TODO comments without a clear plan to address them.
 - Avoid hardcoding values; use configuration files or environment variables.

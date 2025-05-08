@@ -1,11 +1,13 @@
 # Product Requirements Document (PRD)
 
 ## **Product Overview**
+
 The WeatherGov Ruby Client is a Ruby library designed to interact with the [weather.gov API](https://www.weather.gov/documentation/services-web-api). The client will initially support endpoints for retrieving weather forecasts and alerts, with plans to expand to all available endpoints in the future. The client will prioritize performance, security, and developer usability, adhering to best practices for API integration and Ruby development.
 
 ---
 
 ## **Goals and Objectives**
+
 1. Provide a simple, intuitive interface for interacting with the weather.gov API.
 2. Minimize API calls by implementing caching where appropriate.
 3. Ensure the client is respectful of weather.gov resources, even in the absence of rate limits.
@@ -21,7 +23,9 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ## **Functional Requirements**
 
 ### **1. Supported Endpoints**
+
 #### **Phase 1 (Initial Release)**
+
 - **Weather Forecasts**:
   - Retrieve weather forecasts for a given location (latitude/longitude).
   - Support both grid-based and point-based forecast retrieval.
@@ -29,6 +33,7 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
   - Retrieve active weather alerts for a given location or region.
 
 #### **Phase 2 (Future Expansion)**
+
 - Support all other endpoints provided by the weather.gov API, including:
   - Observation stations.
   - Historical weather data.
@@ -37,6 +42,7 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ---
 
 ### **2. API Call Optimization**
+
 - **Caching**:
   - Implement caching for API responses where appropriate (e.g., forecasts that do not change frequently).
   - Use an in-memory caching mechanism that does not persist beyond the lifetime of the client.
@@ -49,6 +55,7 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ---
 
 ### **3. Security**
+
 - **Client Identification**:
   - Include an email address in the `User-Agent` header as required by weather.gov.
   - Example: `User-Agent: WeatherGovRubyClient/1.0 (contact@example.com)`.
@@ -59,15 +66,18 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ---
 
 ### **4. Error Handling**
+
 - **User-Facing Errors**:
   - Provide minimal error details to the user (e.g., "Invalid coordinates" or "API unavailable").
 - **Invalid Input Handling**:
   - Provide clear and actionable error messages to the user when input is invalid.
   - Include details about why the input is invalid (e.g., "Latitude must be between -90 and 90").
   - Example:
+
     ```ruby
     raise WeatherGovApi::ClientError, "Invalid input: Latitude must be between -90 and 90"
     ```
+
 - **Logging**:
   - Log detailed error information (e.g., HTTP status codes, response bodies, stack traces) to a configurable log file.
   - Use a standard logging library (e.g., `Logger`) for consistency.
@@ -75,6 +85,7 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ---
 
 ### **5. Testing**
+
 - **Unit Tests**:
   - Achieve 100% unit test coverage.
   - Use RSpec as the testing framework.
@@ -86,9 +97,11 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
   - Test edge cases, such as empty responses or unexpected data formats.
 - **Coverage Tool**:
   - Use `SimpleCov` to measure and enforce test coverage.
+
 ---
 
 ### **6. Documentation**
+
 - **YARD**:
   - Use YARD to generate developer-friendly documentation.
   - Include detailed descriptions of all public methods, parameters, and return values.
@@ -97,12 +110,14 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ---
 
 ### **7. Ruby Version Support**
+
 - Support only Ruby versions that are actively maintained and receiving security updates.
 - Regularly review and update supported versions as Ruby versions reach end-of-life.
 
 ---
 
 ### **8. Packaging and Distribution**
+
 - Package the client as a Ruby Gem.
 - Publish the gem to [RubyGems.org](https://rubygems.org).
 - Follow semantic versioning (e.g., `1.0.0` for the initial release).
@@ -110,6 +125,7 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ---
 
 ### **9. Dependencies**
+
 - Use external gems only when necessary.
 - Evaluate the pros and cons of each dependency:
   - **Pros**: Reduced development time, community support, reliability.
@@ -122,12 +138,14 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ---
 
 ### **10. Data Transformations**
+
 - Convert API responses into plain Ruby objects (POROs) for ease of use.
 - Provide a consistent interface for accessing response data (e.g., `forecast.temperature` instead of raw JSON).
 - Validate and sanitize API responses before transforming them into Ruby objects.
 - Ensure the transformation logic is modular and reusable across different endpoints.
 - Avoid using external libraries like `dry-struct` to minimize dependencies and keep the implementation lightweight.
 - **Example**:
+
   ```ruby
   class Forecast
     attr_reader :temperature, :humidity, :wind_speed
@@ -142,13 +160,16 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ---
 
 ### **11. Technical Debt Avoidance**
+
 - Adhere to clean code principles, including modular design, single responsibility, and separation of concerns.
 - Conduct regular code reviews to ensure maintainability and adherence to coding standards.
 - Use RuboCop to enforce consistent coding practices.
 - Refactor code regularly to address technical debt and improve readability.
 
 ---
+
 ### **12. Scalability and Resilience**
+
 - Design the client to handle high-concurrency scenarios gracefully.
 - Implement retry logic with exponential backoff for transient failures.
 - Include fallback mechanisms for degraded performance (e.g., returning cached data if the API is unavailable).
@@ -157,6 +178,7 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ---
 
 ### **13. CI/CD Pipeline**
+
 - **Steps**:
   1. Install dependencies.
   2. Run unit tests with RSpec.
@@ -171,13 +193,15 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ---
 
 ### **14. Dependency Management**
+
 - Lock dependencies using `Gemfile.lock` to ensure consistent builds.
 - Regularly audit dependencies for vulnerabilities using tools like `bundler-audit` or `dependabot`.
-    - Avoid unnecessary dependencies to minimize the attack surface and reduce maintenance overhead.
+  - Avoid unnecessary dependencies to minimize the attack surface and reduce maintenance overhead.
 
 ---
 
 ### **15. Error Handling**
+
 - Use custom error classes to categorize errors (e.g., `ClientError`, `ServerError`, `NetworkError`).
 - Define a clear hierarchy for error classes:
   - `WeatherGovApi::Error` (base class for all errors).
@@ -189,13 +213,16 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 - Implement retry logic for recoverable errors (e.g., network timeouts).
 
 ---
+
 ### **16. Logging**
+
 - Use structured logging (e.g., JSON format) for easier parsing and analysis.
 - Allow configurable log levels: `DEBUG`, `INFO`, and `ERROR`.
 - Ensure logs do not contain sensitive information (e.g., API keys, user data).
 - Write logs to a configurable destination (e.g., file, stdout).
 - Include detailed error information in logs, such as HTTP status codes, response bodies, and stack traces.
 - **Example Log Entry**:
+
   ```json
   {
     "timestamp": "2025-05-03T12:00:00Z",
@@ -210,6 +237,7 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
   ---
 
 ### **17. Threat Modeling**
+
 - Identify and mitigate potential attack vectors, including:
   - API abuse (e.g., excessive requests).
   - Denial-of-service attacks.
@@ -221,18 +249,22 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ## **Non-Functional Requirements**
 
 ### **1. Performance**
+
 - Minimize latency by caching responses and reducing redundant API calls.
 - Ensure the client is lightweight and efficient.
 
 ### **2. Security**
+
 - Enforce HTTPS for all API requests.
 - Validate all inputs to prevent injection attacks or malformed requests.
 
 ### **3. Reliability**
+
 - Ensure the client gracefully handles API downtime or unexpected responses.
 - Provide clear error messages and robust logging.
 
 ### **4. Maintainability**
+
 - Write clean, modular, and well-documented code.
 - Use RuboCop to enforce consistent coding standards.
 
@@ -241,6 +273,7 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ## **Milestones and Timeline**
 
 ### **Phase 1: Initial Release**
+
 - **Duration**: 4-6 weeks.
 - **Deliverables**:
   - Support for weather forecasts and alerts.
@@ -250,6 +283,7 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
   - Packaged Ruby Gem.
 
 ### **Phase 2: Expansion**
+
 - **Duration**: TBD.
 - **Deliverables**:
   - Support for additional endpoints (e.g., observation stations, historical data).

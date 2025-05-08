@@ -7,7 +7,9 @@ Thank you for considering contributing to the WeatherGov Ruby Client! We welcome
 ## **Getting Started / Development Setup**
 
 ### **Required Tools**
+
 To contribute to this project, you will need the following tools installed on your system:
+
 - **Ruby**: Version 3.2 or higher.
 - **Bundler**: For managing dependencies (`gem install bundler`).
 - **Git**: For version control.
@@ -15,34 +17,41 @@ To contribute to this project, you will need the following tools installed on yo
 - **Rubocop**: For linting and formatting.
 
 ### **Installation Steps**
+
 1. **Fork the Repository**:
    - Click the "Fork" button on the GitHub repository to create your own copy.
 
 2. **Clone Your Fork**:
+
    ```bash
    git clone https://github.com/<your-username>/weather_gov_api.git
    cd weather_gov_api
    ```
 
 3. **Install Dependencies**:
+
    ```bash
    bundle install
    ```
 
 4. **Run Tests**:
    Ensure everything is working by running the test suite:
+
    ```bash
    bundle exec rspec
    ```
 
 5. **Run Linters**:
    Check for style violations:
+
    ```bash
    bundle exec rubocop
    ```
 
 ### **Recommended IDE Setup**
+
 We recommend using **Visual Studio Code** with the following extensions:
+
 - **Ruby**: Provides syntax highlighting and debugging support.
 - **Rubocop**: Integrates Rubocop linting into VS Code.
 - **RSpec**: Adds support for running and debugging RSpec tests.
@@ -56,6 +65,7 @@ Ensure your IDE is configured to use the project-specific `.rubocop.yml` file fo
 If you find a bug, please help us by submitting a detailed bug report. Use the following template when creating a new issue:
 
 ### **Bug Report Template**
+
 ```markdown
 **Describe the bug**
 A clear and concise description of what the bug is.
@@ -86,6 +96,7 @@ Add any other context about the problem here.
 We welcome suggestions for new features or improvements! To propose an enhancement, please open a GitHub issue using the following template:
 
 ### **Enhancement Proposal Template**
+
 ```markdown
 **Describe the enhancement**
 A clear and concise description of the feature or improvement.
@@ -105,6 +116,7 @@ Add any other context or screenshots about the feature request here.
 ## **Pull Request Process**
 
 ### **Guidelines for Submitting Pull Requests**
+
 1. **Create Small, Focused PRs**:
    - Each PR should address a single issue or enhancement. This makes reviews faster and easier.
    - **DO NOT** create large, unfocused PRs that address multiple issues at once.
@@ -131,7 +143,9 @@ Add any other context or screenshots about the feature request here.
    - Code reviews are a normal part of the process. Be prepared to make changes based on feedback.
 
 ### **Steps to Submit a Pull Request**
+
 1. **Create a New Branch**:
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -141,18 +155,21 @@ Add any other context or screenshots about the feature request here.
    - Write tests for your changes.
 
 3. **Run Tests and Linters**:
+
    ```bash
    bundle exec rspec
    bundle exec rubocop
    ```
 
 4. **Commit Your Changes**:
+
    ```bash
    git add .
    git commit -m "feat: Add feature description"
    ```
 
 5. **Push Your Branch**:
+
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -172,6 +189,7 @@ This project adheres to the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). By partici
 ## **Communication**
 
 For questions, discussions, or general communication, please use the following channels:
+
 - **GitHub Issues**: For bug reports, feature requests, and general questions.
 - **Email**: Contact the maintainers at `maintainers@weather_gov_api.com`.
 
