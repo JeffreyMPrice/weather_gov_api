@@ -1,9 +1,11 @@
 {
+    "editor.codeActionsOnSave": {
+        "source.fixAll.markdownlint": "explicit"
+    },
+    "markdownlint.autoFixOnSave": true,
+    "markdownlint.run": "onType",
     "[markdown]": {
         "editor.formatOnSave": true,
         "editor.formatOnPaste": true
     },
-    "editor.codeActionsOnSave": {
-        "source.fixAll.markdownlint": true
-    }
 }
