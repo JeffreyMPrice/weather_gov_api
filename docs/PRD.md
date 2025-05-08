@@ -61,6 +61,13 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ### **4. Error Handling**
 - **User-Facing Errors**:
   - Provide minimal error details to the user (e.g., "Invalid coordinates" or "API unavailable").
+- **Invalid Input Handling**:
+  - Provide clear and actionable error messages to the user when input is invalid.
+  - Include details about why the input is invalid (e.g., "Latitude must be between -90 and 90").
+  - Example:
+    ```ruby
+    raise WeatherGovApi::ClientError, "Invalid input: Latitude must be between -90 and 90"
+    ```
 - **Logging**:
   - Log detailed error information (e.g., HTTP status codes, response bodies, stack traces) to a configurable log file.
   - Use a standard logging library (e.g., `Logger`) for consistency.
@@ -150,10 +157,16 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
 ---
 
 ### **13. CI/CD Pipeline**
-- Use a CI/CD pipeline to automate testing, linting, and deployment.
-- Ensure all tests pass and RuboCop reports no offenses before merging changes.
-- Use tools like GitHub Actions or CircleCI for continuous integration.
-- Automate the deployment of the gem to RubyGems.org after passing all checks.
+- **Steps**:
+  1. Install dependencies.
+  2. Run unit tests with RSpec.
+  3. Measure test coverage with SimpleCov.
+  4. Lint code with RuboCop.
+  5. Deploy the gem to RubyGems.org after passing all checks.
+- **Tools**:
+  - CircleCI for continuous integration.
+  - SimpleCov for test coverage.
+  - RuboCop for linting.
 
 ---
 
@@ -195,6 +208,15 @@ The WeatherGov Ruby Client is a Ruby library designed to interact with the [weat
     }
   }
   ---
+
+### **17. Threat Modeling**
+- Identify and mitigate potential attack vectors, including:
+  - API abuse (e.g., excessive requests).
+  - Denial-of-service attacks.
+  - Malformed or malicious API responses.
+- Follow OWASP guidelines for secure API integration.
+
+---
 
 ## **Non-Functional Requirements**
 
