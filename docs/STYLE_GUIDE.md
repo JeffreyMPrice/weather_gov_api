@@ -206,7 +206,15 @@ raise "Something went wrong"
 ### **Unit Tests**
 
 - Use RSpec for unit testing.
-- Mock external API calls using WebMock or VCR.
+- Mock external API calls using VCR.
+- **When asserting error messages, prefer the `include` matcher for substring matching over `match` or exact string matches. This makes tests more resilient to minor changes in error messages.**
+- Use `match` only when regular expression matching is required (e.g., case-insensitive or pattern-based assertions).
+
+#### **Example**
+
+```ruby
+expect { ... }.to raise_error(WeatherGovApi::ApiError, include("Invalid Parameter"))
+```
 
 ### **Integration Tests**
 
@@ -214,8 +222,21 @@ raise "Something went wrong"
 
 ### **Test File Structure**
 
-- Place unit tests in [weather_gov_api](http://_vscodecontentref_/4) and name files after the class being tested (e.g., `client_spec.rb`).
+- Place unit tests for the client in `spec/weather_gov_api/client/`, with one spec file per endpoint (e.g., `points_spec.rb`, `forecast_spec.rb`, `alerts_spec.rb`). This improves maintainability and clarity as the client grows.
+- Name each spec file after the endpoint or feature it tests.
 - Place integration tests in `spec/integration/`.
+
+**Example Structure:**
+
+```
+spec/
+├── weather_gov_api/
+│   └── client/
+│       ├── points_spec.rb
+│       ├── forecast_spec.rb
+│       └── alerts_spec.rb
+└── integration/
+```
 
 ### **Test Scope**
 

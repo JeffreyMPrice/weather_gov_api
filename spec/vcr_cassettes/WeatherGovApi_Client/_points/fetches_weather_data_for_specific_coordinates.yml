@@ -1,0 +1,152 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.weather.gov/points/39.7456,-97.0892
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Test User Agent
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.20.1
+      Content-Type:
+      - application/geo+json
+      X-Powered-By:
+      - PHP/8.0.30
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - X-Correlation-Id, X-Request-Id, X-Server-Id
+      X-Request-Id:
+      - 4c0097f7-5a67-4f80-b04b-bb0d12ce4d23
+      X-Correlation-Id:
+      - e3c3bb6
+      X-Server-Id:
+      - vm-bldr-nids-apiapp15.ncep.noaa.gov
+      Vary:
+      - Accept,Feature-Flags,Accept-Language
+      - Accept-Encoding
+      Cache-Control:
+      - public, max-age=86400, s-maxage=120
+      Expires:
+      - Fri, 09 May 2025 20:27:15 GMT
+      Date:
+      - Thu, 08 May 2025 20:27:15 GMT
+      Content-Length:
+      - '3053'
+      Connection:
+      - keep-alive
+      X-Edge-Request-Id:
+      - 4ae07ab8
+      Strict-Transport-Security:
+      - max-age=31536000 ; includeSubDomains ; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+            "@context": [
+                "https://geojson.org/geojson-ld/geojson-context.jsonld",
+                {
+                    "@version": "1.1",
+                    "wx": "https://api.weather.gov/ontology#",
+                    "s": "https://schema.org/",
+                    "geo": "http://www.opengis.net/ont/geosparql#",
+                    "unit": "http://codes.wmo.int/common/unit/",
+                    "@vocab": "https://api.weather.gov/ontology#",
+                    "geometry": {
+                        "@id": "s:GeoCoordinates",
+                        "@type": "geo:wktLiteral"
+                    },
+                    "city": "s:addressLocality",
+                    "state": "s:addressRegion",
+                    "distance": {
+                        "@id": "s:Distance",
+                        "@type": "s:QuantitativeValue"
+                    },
+                    "bearing": {
+                        "@type": "s:QuantitativeValue"
+                    },
+                    "value": {
+                        "@id": "s:value"
+                    },
+                    "unitCode": {
+                        "@id": "s:unitCode",
+                        "@type": "@id"
+                    },
+                    "forecastOffice": {
+                        "@type": "@id"
+                    },
+                    "forecastGridData": {
+                        "@type": "@id"
+                    },
+                    "publicZone": {
+                        "@type": "@id"
+                    },
+                    "county": {
+                        "@type": "@id"
+                    }
+                }
+            ],
+            "id": "https://api.weather.gov/points/39.7456,-97.0892",
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -97.0892,
+                    39.7456
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/points/39.7456,-97.0892",
+                "@type": "wx:Point",
+                "cwa": "TOP",
+                "forecastOffice": "https://api.weather.gov/offices/TOP",
+                "gridId": "TOP",
+                "gridX": 32,
+                "gridY": 81,
+                "forecast": "https://api.weather.gov/gridpoints/TOP/32,81/forecast",
+                "forecastHourly": "https://api.weather.gov/gridpoints/TOP/32,81/forecast/hourly",
+                "forecastGridData": "https://api.weather.gov/gridpoints/TOP/32,81",
+                "observationStations": "https://api.weather.gov/gridpoints/TOP/32,81/stations",
+                "relativeLocation": {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -97.086661,
+                            39.679376
+                        ]
+                    },
+                    "properties": {
+                        "city": "Linn",
+                        "state": "KS",
+                        "distance": {
+                            "unitCode": "wmoUnit:m",
+                            "value": 7366.9851976444
+                        },
+                        "bearing": {
+                            "unitCode": "wmoUnit:degree_(angle)",
+                            "value": 358
+                        }
+                    }
+                },
+                "forecastZone": "https://api.weather.gov/zones/forecast/KSZ009",
+                "county": "https://api.weather.gov/zones/county/KSC201",
+                "fireWeatherZone": "https://api.weather.gov/zones/fire/KSZ009",
+                "timeZone": "America/Chicago",
+                "radarStation": "KTWX"
+            }
+        }
+  recorded_at: Thu, 08 May 2025 20:27:16 GMT
+recorded_with: VCR 6.3.1
