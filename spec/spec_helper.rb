@@ -6,6 +6,15 @@ require "simplecov"
 require "simplecov-cobertura"
 require "debug"
 require "factory_bot"
+require "vcr"
+require "webmock/rspec"
+
+VCR.configure do |c|
+  c.cassette_library_dir = "spec/vcr_cassettes"
+  c.hook_into :webmock
+  c.configure_rspec_metadata!
+  c.ignore_localhost = true
+end
 
 SimpleCov.start do
   add_filter "/spec/"
