@@ -43,7 +43,7 @@ module WeatherGovApi
     def current_weather(latitude:, longitude:)
       stations_response = observation_stations(latitude: latitude, longitude: longitude)
       station = stations_response.data.dig("features", 0)
-      raise WeatherGovApi::ApiError.new(message: "No observation stations found") unless station
+      raise WeatherGovApi::ClientError.new(message: "No observation stations found") unless station
 
       station_id = station.dig("properties", "stationIdentifier")
       response = connection.get("/stations/#{station_id}/observations/latest")
