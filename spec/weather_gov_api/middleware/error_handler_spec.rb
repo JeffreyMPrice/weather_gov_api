@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "faraday"
 require "weather_gov_api/errors"
@@ -29,16 +31,16 @@ RSpec.describe WeatherGovApi::Middleware::ErrorHandler do
   it "raises NetworkError for Faraday::TimeoutError" do
     env = env_with(status: 200)
     allow(app).to receive(:call).and_raise(Faraday::TimeoutError, "timeout")
-    expect {
+    expect do
       middleware.call(env)
-    }.to raise_error(WeatherGovApi::NetworkError, include("timeout"))
+    end.to raise_error(WeatherGovApi::NetworkError, include("timeout"))
   end
 
   it "raises ServerError for generic Faraday::Error" do
     env = env_with(status: 200)
     allow(app).to receive(:call).and_raise(Faraday::Error, "boom")
-    expect {
+    expect do
       middleware.call(env)
-    }.to raise_error(WeatherGovApi::ServerError, include("boom"))
+    end.to raise_error(WeatherGovApi::ServerError, include("boom"))
   end
 end

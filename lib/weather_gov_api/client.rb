@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative "middleware/error_handler"
 
 module WeatherGovApi
@@ -15,14 +16,11 @@ module WeatherGovApi
       response = connection.get("/points/#{latitude},#{longitude}")
       Response.new(response)
     end
-  
-    # rubocop:disable Metrics/MethodLength
+
     def observation_stations(latitude:, longitude:)
       points_response = points(latitude: latitude, longitude: longitude)
       stations_url = points_response.data.dig("properties", "observationStations")
-      unless stations_url
-        raise WeatherGovApi::ClientError, "No observation stations URL found in points response"
-      end
+      raise WeatherGovApi::ClientError, "No observation stations URL found in points response" unless stations_url
 
       stations_path = observation_stations_path(stations_url)
 
@@ -30,7 +28,6 @@ module WeatherGovApi
       raise_api_error(response) unless response.success?
       Response.new(response)
     end
-    # rubocop:enable Metrics/MethodLength
 
     # Retrieves the latest observation for the nearest weather station to the given coordinates.
     #

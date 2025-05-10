@@ -11,7 +11,6 @@ RSpec.describe WeatherGovApi::Client do
     let(:latitude) { 39.7456 }
     let(:longitude) { -97.0892 }
 
-
     it "returns a successful response with properties for valid US coordinates" do
       response = client.current_weather(latitude: latitude, longitude: longitude)
       expect(response).to be_success
@@ -21,18 +20,22 @@ RSpec.describe WeatherGovApi::Client do
 
     it "raises a ClientError if no observation stations are found" do
       # Simulate no stations found in the observation_stations response
-      allow_any_instance_of(WeatherGovApi::Client).to receive(:observation_stations)
-        .and_return(double(data: { "features" => [] }))
 
-      expect {
+      allow(client).to receive(:observation_stations)
+        .and_return(instance_double(
+                      WeatherGovApi::Response,
+                      data: { "features" => [] }
+                    ))
+
+      expect do
         client.current_weather(latitude: 0, longitude: 0)
-      }.to raise_error(WeatherGovApi::ClientError, include("No observation stations found"))
+      end.to raise_error(WeatherGovApi::ClientError, include("No observation stations found"))
     end
 
     it "raises a ClientError for invalid coordinates" do
-      expect {
+      expect do
         client.current_weather(latitude: 91, longitude: 181)
-      }.to raise_error(WeatherGovApi::ClientError)
+      end.to raise_error(WeatherGovApi::ClientError)
     end
   end
 end
