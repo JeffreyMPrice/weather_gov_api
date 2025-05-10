@@ -8,15 +8,41 @@ module WeatherGovApi
   class Client
     BASE_URL = "https://api.weather.gov"
 
+    # Initializes a new WeatherGovApi::Client.
+    #
+    # @param user_agent [String, nil] The User-Agent header to use for requests.
+    #   If nil, a default User-Agent is used.
     def initialize(user_agent: nil)
       @user_agent = user_agent || "WeatherGovApi Ruby Gem (#{WeatherGovApi::VERSION})"
     end
 
+    # Retrieves point metadata for the given coordinates.
+    #
+    # @param latitude [Float] The latitude of the location.
+    # @param longitude [Float] The longitude of the location.
+    # @return [Response] The API response containing point metadata.
+    # @raise [WeatherGovApi::ClientError] for invalid coordinates or 4xx errors.
+    # @raise [WeatherGovApi::ServerError] for 5xx API errors.
+    # @raise [WeatherGovApi::NetworkError] for network failures.
+    #
+    # @example
+    #   client.points(latitude: 39.7456, longitude: -97.0892)
     def points(latitude:, longitude:)
       response = connection.get("/points/#{latitude},#{longitude}")
       Response.new(response)
     end
 
+    # Retrieves observation stations for the given coordinates.
+    #
+    # @param latitude [Float] The latitude of the location.
+    # @param longitude [Float] The longitude of the location.
+    # @return [Response] The API response containing observation stations.
+    # @raise [WeatherGovApi::ClientError] if the stations URL is missing or invalid.
+    # @raise [WeatherGovApi::ServerError] for 5xx API errors.
+    # @raise [WeatherGovApi::NetworkError] for network failures.
+    #
+    # @example
+    #   client.observation_stations(latitude: 39.7456, longitude: -97.0892)
     def observation_stations(latitude:, longitude:)
       points_response = points(latitude: latitude, longitude: longitude)
       stations_url = points_response.data.dig("properties", "observationStations")
@@ -62,6 +88,11 @@ module WeatherGovApi
 
     private
 
+    # Extracts the path from the observation stations URL.
+    #
+    # @param url [String] The observation stations URL.
+    # @return [String] The path portion of the URL.
+    # @raise [WeatherGovApi::ClientError] if the URL is invalid.
     def observation_stations_path(url)
       uri = URI.parse(url)
       unless uri.host == URI.parse(BASE_URL).host
@@ -71,6 +102,9 @@ module WeatherGovApi
       uri.path
     end
 
+    # Returns the Faraday connection with middleware.
+    #
+    # @return [Faraday::Connection]
     def connection
       @connection ||= Faraday.new(url: BASE_URL) do |faraday|
         faraday.headers["User-Agent"] = @user_agent

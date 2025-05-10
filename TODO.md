@@ -50,6 +50,11 @@ Ruby Client up to the standards defined in the project documentation.
     - As a developer, I want to validate that API responses conform to expected
     formats before transforming them into Ruby objects, raising errors for
     malformed or unexpected data.
+11. **Transform API Responses into Ruby Objects**
+    - As a developer, I want API responses to be converted into plain Ruby objects (POROs) like `Forecast` and `Alert`, providing a consistent and easy-to-use interface.
+
+12. **Implement Retry Logic for Transient Failures**
+    - As a developer, I want the client to automatically retry API requests with exponential backoff for transient network errors, improving resilience.
 
 ---
 

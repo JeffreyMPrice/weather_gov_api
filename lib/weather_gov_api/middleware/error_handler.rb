@@ -18,6 +18,11 @@ module WeatherGovApi
     # @raise [WeatherGovApi::ServerError] for 5xx errors or Faraday::Error
     # @raise [WeatherGovApi::NetworkError] for network failures (timeouts, connection errors)
     class ErrorHandler < Faraday::Middleware
+      # Handles the HTTP response after completion.
+      #
+      # @param env [Faraday::Env] The Faraday request environment.
+      # @raise [WeatherGovApi::ClientError] for 4xx errors.
+      # @raise [WeatherGovApi::ServerError] for 5xx errors.
       # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
       def on_complete(env)
         puts "[DEBUG] WeatherGovApi::Middleware::ErrorHandler called with status: #{env.status}"
@@ -41,6 +46,11 @@ module WeatherGovApi
         end
       end
 
+      # Handles network and Faraday errors, raising custom error classes.
+      #
+      # @param env [Faraday::Env] The Faraday request environment.
+      # @raise [WeatherGovApi::NetworkError] for network failures.
+      # @raise [WeatherGovApi::ServerError] for other Faraday errors.
       def call(env)
         @app.call(env).on_complete do |response_env|
           on_complete(response_env)
