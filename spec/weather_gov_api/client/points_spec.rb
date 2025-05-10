@@ -15,22 +15,22 @@ RSpec.describe WeatherGovApi::Client do
       expect(response.data).to include("properties")
     end
 
-    it "raises an ApiError with an 'Invalid Parameter' message for out-of-range longitude" do
+    it "raises an ClientError with a 'does not appear to be a valid coordinate' message for out-of-range longitude" do
       invalid_latitude = 9.7456
       invalid_longitude = -200.0892
 
       expect do
         client.points(latitude: invalid_latitude, longitude: invalid_longitude)
-      end.to raise_error(WeatherGovApi::ApiError, include("Invalid Parameter"))
+      end.to raise_error(WeatherGovApi::ClientError, include("does not appear to be a valid coordinate"))
     end
 
-    it "raises an ApiError with a 'Data Unavailable' message for non-US coordinates" do
+    it "raises an ClientError with an 'Unable to provide data for requested point' message for non-US coordinates" do
       non_us_latitude = 48.8575
       non_us_longitude = 2.3514
 
       expect do
         client.points(latitude: non_us_latitude, longitude: non_us_longitude)
-      end.to raise_error(WeatherGovApi::ApiError, include("Data Unavailable"))
+      end.to raise_error(WeatherGovApi::ClientError, include("Unable to provide data for requested point"))
     end
   end
 end

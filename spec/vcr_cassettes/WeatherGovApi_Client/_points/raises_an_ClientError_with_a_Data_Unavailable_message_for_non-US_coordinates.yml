@@ -1,0 +1,67 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.weather.gov/points/48.8575,2.3514
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Test User Agent
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - nginx/1.20.1
+      Content-Type:
+      - application/problem+json
+      X-Powered-By:
+      - PHP/8.0.30
+      X-Request-Id:
+      - 6dd7f673-4631-4b9f-9884-e1c0b4fd1de0
+      X-Correlation-Id:
+      - '34520486'
+      X-Server-Id:
+      - vm-bldr-nids-apiapp11.ncep.noaa.gov
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - X-Correlation-Id, X-Request-Id, X-Server-Id
+      Pragma:
+      - no-cache
+      Content-Length:
+      - '304'
+      Cache-Control:
+      - private, must-revalidate, max-age=86361
+      Expires:
+      - Sat, 10 May 2025 21:56:45 GMT
+      Date:
+      - Fri, 09 May 2025 21:57:24 GMT
+      Connection:
+      - keep-alive
+      X-Edge-Request-Id:
+      - 16782f2e
+      Vary:
+      - Accept,Feature-Flags,Accept-Language
+      Strict-Transport-Security:
+      - max-age=31536000 ; includeSubDomains ; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+            "correlationId": "34520486",
+            "title": "Data Unavailable For Requested Point",
+            "type": "https://api.weather.gov/problems/InvalidPoint",
+            "status": 404,
+            "detail": "Unable to provide data for requested point 48.8575,2.3514",
+            "instance": "https://api.weather.gov/requests/34520486"
+        }
+  recorded_at: Fri, 09 May 2025 21:57:24 GMT
+recorded_with: VCR 6.3.1
