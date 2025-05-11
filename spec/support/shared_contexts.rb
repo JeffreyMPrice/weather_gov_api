@@ -12,11 +12,4 @@ RSpec.shared_context "with successful points request" do
   let(:points_response_body) do
     build(:points_response, grid_id: grid_id, grid_x: grid_x, grid_y: grid_y)
   end
-
-  before do
-    # Assuming 'stubs' and 'default_headers' are available
-    stubs.get("/points/#{latitude},#{longitude}") do
-      [200, default_headers, points_response_body.to_json]
-    end
-  end
 end

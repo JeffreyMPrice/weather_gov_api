@@ -5,55 +5,37 @@ require "spec_helper"
 
 RSpec.describe WeatherGovApi::Client do
   let(:client) { described_class.new(user_agent: "Test User Agent") }
-  let(:stubs) { Faraday::Adapter::Test::Stubs.new }
-  let(:connection) { Faraday.new { |builder| builder.adapter :test, stubs } }
-  let(:default_headers) do
-    {
-      "Accept" => "application/json",
-      "User-Agent" => "Test User Agent"
-    }
-  end
 
-  before do
-    allow(client).to receive(:connection).and_return(connection)
-  end
-
-  # rubocop:disable RSpec/MultipleMemoizedHelpers
-  describe "#observation_stations" do
+  describe "#observation_stations", :vcr do
     include_context "with successful points request"
     let(:latitude) { 39.7456 }
     let(:longitude) { -97.0892 }
-    let(:grid_id) { "KMYZ" }
 
-    let(:stations_response) { build(:stations_response, station_identifier: grid_id) }
-
-    it "fetches observation stations for given coordinates" do
-      stubs.get("/gridpoints/#{grid_id}/#{grid_x},#{grid_y}/stations") do
-        [
-          200,
-          default_headers,
-          stations_response.to_json
-        ]
-      end
-
+    it "returns a successful response with features for valid US coordinates" do
       response = client.observation_stations(latitude: latitude, longitude: longitude)
-      expect(response.data["features"].first["properties"]["stationIdentifier"]).to eq(grid_id)
-
-      stubs.verify_stubbed_calls
+      expect(response).to be_success
+      expect(response.data).to include("features")
+      expect(response.data["features"].first["properties"]).to include("stationIdentifier")
     end
 
-    context "when the points response is missing the stations URL" do
-      let(:points_response_body) { { "properties" => {} } }
+    it "raises a ClientError if no observation stations URL is found in the points response" do
+      # Simulate coordinates that will not return an observationStations property
+      allow(client).to receive(:points)
+        .and_return(instance_double(
+                      WeatherGovApi::Response,
+                      data: { "properties" => {} }
+                    ))
 
-      it "raises an error if the stations URL is missing" do
-        expect do
-          client.observation_stations(latitude: latitude, longitude: longitude)
-        end.to raise_error(WeatherGovApi::ApiError, "No observation stations URL found in points response")
+      expect do
+        client.observation_stations(latitude: 0, longitude: 0)
+      end.to raise_error(WeatherGovApi::ClientError, include("No observation stations URL found"))
+    end
 
-        stubs.verify_stubbed_calls
-      end
+    it "raises a ClientError for invalid coordinates" do
+      expect do
+        client.observation_stations(latitude: 91, longitude: 181)
+      end.to raise_error(WeatherGovApi::ClientError)
     end
   end
-  # rubocop:enable RSpec/MultipleMemoizedHelpers
 end
 # rubocop:enable RSpec/SpecFilePathFormat

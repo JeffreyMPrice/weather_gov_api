@@ -1,0 +1,67 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.weather.gov/points/91,181
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Test User Agent
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Server:
+      - nginx/1.20.1
+      Content-Type:
+      - application/problem+json
+      X-Powered-By:
+      - PHP/8.0.30
+      X-Request-Id:
+      - bcd3956f-9374-41de-a30f-f274dc4a8b0a
+      X-Correlation-Id:
+      - '35313198'
+      X-Server-Id:
+      - vm-bldr-nids-apiapp13.ncep.noaa.gov
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - X-Correlation-Id, X-Request-Id, X-Server-Id
+      Pragma:
+      - no-cache
+      Content-Length:
+      - '313'
+      Cache-Control:
+      - private, must-revalidate, max-age=86372
+      Expires:
+      - Sat, 10 May 2025 22:42:03 GMT
+      Date:
+      - Fri, 09 May 2025 22:42:31 GMT
+      Connection:
+      - keep-alive
+      X-Edge-Request-Id:
+      - 525b617e
+      Vary:
+      - Accept,Feature-Flags,Accept-Language
+      Strict-Transport-Security:
+      - max-age=31536000 ; includeSubDomains ; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+            "correlationId": "35313198",
+            "title": "Invalid Parameter",
+            "type": "https://api.weather.gov/problems/InvalidParameter",
+            "status": 400,
+            "detail": "Parameter \"point\" is invalid: '91,181' does not appear to be a valid coordinate",
+            "instance": "https://api.weather.gov/requests/35313198"
+        }
+  recorded_at: Fri, 09 May 2025 22:42:31 GMT
+recorded_with: VCR 6.3.1

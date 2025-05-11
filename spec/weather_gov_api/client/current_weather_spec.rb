@@ -6,77 +6,36 @@ require "spec_helper"
 
 RSpec.describe WeatherGovApi::Client do
   let(:client) { described_class.new(user_agent: "Test User Agent") }
-  let(:stubs) { Faraday::Adapter::Test::Stubs.new }
-  let(:connection) { Faraday.new { |builder| builder.adapter :test, stubs } }
-  let(:default_headers) do
-    {
-      "Accept" => "application/json",
-      "User-Agent" => "Test User Agent"
-    }
-  end
 
-  before do
-    allow(client).to receive(:connection).and_return(connection)
-  end
+  describe "#current_weather", :vcr do
+    let(:latitude) { 39.7456 }
+    let(:longitude) { -97.0892 }
 
-  describe "#current_weather" do
-    let(:points_response) { build(:points_response) }
-    let(:stations_response) { build(:stations_response) }
-    let(:weather_response) { build(:weather_response) }
-
-    it "fetches current weather for given coordinates" do
-      stubs.get("/points/39.0693,-95.6245") do
-        [
-          200,
-          default_headers,
-          points_response.to_json
-        ]
-      end
-
-      stubs.get("/gridpoints/TOP/31,80/stations") do
-        [
-          200,
-          default_headers,
-          stations_response.to_json
-        ]
-      end
-
-      stubs.get("/stations/KTOP/observations/latest") do
-        [
-          200,
-          default_headers,
-          weather_response.to_json
-        ]
-      end
-
-      response = client.current_weather(latitude: 39.0693, longitude: -95.6245)
-      expect(response.data["properties"]["temperature"]["value"]).to eq(22.8)
-
-      stubs.verify_stubbed_calls
+    it "returns a successful response with properties for valid US coordinates" do
+      response = client.current_weather(latitude: latitude, longitude: longitude)
+      expect(response).to be_success
+      expect(response.data).to include("properties")
+      expect(response.data["properties"]).to include("temperature")
     end
 
-    it "raises an error when no stations are found" do
-      stubs.get("/points/39.0693,-95.6245") do
-        [
-          200,
-          default_headers,
-          points_response.to_json
-        ]
-      end
+    it "raises a ClientError if no observation stations are found" do
+      # Simulate no stations found in the observation_stations response
 
-      stubs.get("/gridpoints/TOP/31,80/stations") do
-        [
-          200,
-          default_headers,
-          { "features" => [] }.to_json
-        ]
-      end
+      allow(client).to receive(:observation_stations)
+        .and_return(instance_double(
+                      WeatherGovApi::Response,
+                      data: { "features" => [] }
+                    ))
 
       expect do
-        client.current_weather(latitude: 39.0693, longitude: -95.6245)
-      end.to raise_error(WeatherGovApi::ApiError, "No observation stations found")
+        client.current_weather(latitude: 0, longitude: 0)
+      end.to raise_error(WeatherGovApi::ClientError, include("No observation stations found"))
+    end
 
-      stubs.verify_stubbed_calls
+    it "raises a ClientError for invalid coordinates" do
+      expect do
+        client.current_weather(latitude: 91, longitude: 181)
+      end.to raise_error(WeatherGovApi::ClientError)
     end
   end
 end
