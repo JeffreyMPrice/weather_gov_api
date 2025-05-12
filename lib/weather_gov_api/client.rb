@@ -80,10 +80,7 @@ module WeatherGovApi
       grid_y = grid_data["gridY"]
 
       response = connection.get("/gridpoints/#{grid_id}/#{grid_x},#{grid_y}/forecast")
-      raise_api_error(response) unless response.success?
       Response.new(response)
-    rescue Faraday::Error => e
-      raise WeatherGovApi::ApiError.new(message: "API request failed: #{e.message}")
     end
 
     private
